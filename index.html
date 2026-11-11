@@ -1,12 +1,14 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <head>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173b32">
+  <meta name="description" content="Laya Integrated School English Class Learning Portal">
   <title>English Class Learning Portal</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     * {
@@ -105,57 +107,215 @@
       font-size: 11px;
       text-align: center;
     }
+
+    .dashboard {
+      display: none;
+    }
+
+    .dashboard h2 {
+      color: #173b32;
+    }
+
+    .dashboard p {
+      line-height: 1.6;
+    }
+
+    .logout-button {
+      background: #68736c;
+    }
   </style>
 </head>
 
 <body>
 
   <main class="login-card">
-    <div class="school-name">Laya Integrated School</div>
 
-    <h1>English Class Portal</h1>
+    <section id="loginSection">
+      <div class="school-name">Laya Integrated School</div>
 
-    <p class="subtitle">
-      Welcome! Sign in to access your English learning materials
-      and classroom resources.
-    </p>
+      <h1>English Class Portal</h1>
 
-    <form id="loginForm">
-      <label for="username">Username or Email</label>
-      <input
-        id="username"
-        type="text"
-        placeholder="Enter your username or email"
-        autocomplete="username"
-        required
-      >
+      <p class="subtitle">
+        Welcome! Sign in to access your English learning materials
+        and classroom resources.
+      </p>
 
-      <label for="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        placeholder="Enter your password"
-        autocomplete="current-password"
-        required
-      >
+      <form id="loginForm">
+        <label for="username">Username or Email</label>
+        <input
+          id="username"
+          type="text"
+          placeholder="Enter your username or email"
+          autocomplete="username"
+          required
+        >
 
-      <button id="loginButton" type="submit">Sign In</button>
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          required
+        >
 
-      <div id="message" role="status" aria-live="polite"></div>
-    </form>
+        <button id="loginButton" type="submit">
+          Sign In
+        </button>
+
+        <div id="message" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <section id="dashboardSection" class="dashboard">
+      <div class="school-name">Laya Integrated School</div>
+
+      <h2 id="welcomeTitle">Welcome!</h2>
+
+      <p id="accountDetails"></p>
+
+      <p>
+        Your account has been successfully authenticated.
+        Your learning dashboard will be available here.
+      </p>
+
+      <button id="logoutButton" class="logout-button" type="button">
+        Sign Out
+      </button>
+    </section>
 
     <div class="footer">
       English Learning Portal · Grades 7–10
     </div>
-  </main>
-<script>
-  const SUPABASE_URL = "https://njozhfubaagfusenxlxe.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_g5yQydfOR_iHCtZOvLHWTA_WQ9_Akng";
 
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
-</script>
+  </main>
+
+  <script>
+    // SUPABASE CONNECTION
+    const SUPABASE_URL =
+      "https://njozhfubaagfusenxlxe.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_g5yQydfOR_iHCtZOvLHWTA_WQ9_Akng";
+
+    // REPLACE THIS WITH YOUR ADMINISTRATOR AUTH EMAIL
+    const ADMIN_EMAIL = "YOUR_ADMIN_EMAIL_HERE".toLowerCase();
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const loginForm = document.getElementById("loginForm");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    const loginSection = document.getElementById("loginSection");
+    const dashboardSection = document.getElementById("dashboardSection");
+
+    // LOGIN
+    loginForm.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!username || !password) {
+        message.textContent = "Please enter your login credentials.";
+        return;
+      }
+
+      loginButton.disabled = true;
+      loginButton.textContent = "Signing in...";
+      message.textContent = "";
+
+      try {
+        // Convert student usernames into their internal login emails.
+        const loginEmail = username.includes("@")
+          ? username.toLowerCase()
+          : `${username.toLowerCase()}@students.english-class.invalid`;
+
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+            email: loginEmail,
+            password: password
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        const user = data.user;
+        const actualEmail = (user.email || "").toLowerCase();
+
+        // CHECK ADMINISTRATOR ACCOUNT
+        if (
+          ADMIN_EMAIL !== "layaintegratedschool@gmail.com" &&
+          actualEmail === ADMIN_EMAIL
+        ) {
+          loginSection.style.display = "none";
+          dashboardSection.style.display = "block";
+
+          document.getElementById("welcomeTitle").textContent =
+            "Welcome, Administrator!";
+
+          document.getElementById("accountDetails").textContent =
+            "Administrator account";
+
+          return;
+        }
+
+        // CHECK STUDENT PROFILE
+        const { data: profile, error: profileError } =
+          await supabaseClient
+            .from("student_profiles")
+            .select("username, display_name, grade_level")
+            .eq("id", user.id)
+            .single();
+
+        if (profileError || !profile) {
+          await supabaseClient.auth.signOut();
+          throw new Error(
+            "No student profile was found for this account. Please contact your administrator."
+          );
+        }
+
+        // DISPLAY STUDENT DASHBOARD
+        loginSection.style.display = "none";
+        dashboardSection.style.display = "block";
+
+        document.getElementById("welcomeTitle").textContent =
+          "Welcome, " + profile.display_name + "!";
+
+        document.getElementById("accountDetails").textContent =
+          "Username: " + profile.username +
+          " | " + profile.grade_level;
+
+      } catch (error) {
+        message.textContent =
+          error.message || "Unable to sign in. Please try again.";
+      } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = "Sign In";
+      }
+    });
+
+    // SIGN OUT
+    document.getElementById("logoutButton")
+      .addEventListener("click", async function() {
+
+        await supabaseClient.auth.signOut();
+
+        dashboardSection.style.display = "none";
+        loginSection.style.display = "block";
+
+        loginForm.reset();
+        message.textContent = "";
+      });
+
+  </script>
+
 </body>
 </html>
