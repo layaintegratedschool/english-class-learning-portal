@@ -6,10 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173b32">
   <title>English Class Learning Portal</title>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -39,8 +42,15 @@
       text-transform: uppercase;
     }
 
-    h1 { margin: 10px 0; color: #173b32; font-size: 27px; }
-    h2 { color: #173b32; }
+    h1 {
+      margin: 10px 0;
+      color: #173b32;
+      font-size: 27px;
+    }
+
+    h2 {
+      color: #173b32;
+    }
 
     .subtitle {
       color: #68736c;
@@ -78,8 +88,14 @@
       cursor: pointer;
     }
 
-    button:disabled { opacity: .6; cursor: wait; }
-    .secondary-button { background: #68736c; }
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .secondary-button {
+      background: #68736c;
+    }
 
     .text-button {
       background: transparent;
@@ -108,16 +124,51 @@
       text-align: center;
     }
 
-    .hidden { display: none !important; }
+    .hidden {
+      display: none !important;
+    }
+
+    /* STUDENT TERM DASHBOARD */
+
+    .term-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-top: 22px;
+    }
+
+    .term-card {
+      padding: 20px;
+      border: 1px solid #dce5dd;
+      border-left: 5px solid #245748;
+      border-radius: 12px;
+      background: #f8faf7;
+    }
+
+    .term-card h3 {
+      margin: 0 0 8px;
+      color: #173b32;
+      font-size: 18px;
+    }
+
+    .term-card p {
+      margin: 0;
+      color: #68736c;
+      font-size: 13px;
+      line-height: 1.5;
+    }
   </style>
 </head>
 
 <body>
 <main class="login-card">
 
+  <!-- LOGIN SECTION -->
   <section id="loginSection">
     <div class="school-name">Laya Integrated School</div>
+
     <h1>English Class Portal</h1>
+
     <p class="subtitle">
       Welcome! Sign in to access your English learning materials
       and classroom resources.
@@ -125,70 +176,113 @@
 
     <form id="loginForm">
       <label for="username">Username or Email</label>
-      <input id="username" type="text"
+      <input
+        id="username"
+        type="text"
         placeholder="Enter your username or email"
-        autocomplete="username" required>
+        autocomplete="username"
+        required
+      >
 
       <label for="password">Password</label>
-      <input id="password" type="password"
+      <input
+        id="password"
+        type="password"
         placeholder="Enter your password"
-        autocomplete="current-password" required>
+        autocomplete="current-password"
+        required
+      >
 
-      <button id="loginButton" type="submit">Sign In</button>
+      <button id="loginButton" type="submit">
+        Sign In
+      </button>
+
       <button class="text-button" id="forgotButton" type="button">
         Forgot Password?
       </button>
+
       <div id="message" class="status" role="status"></div>
     </form>
   </section>
 
+  <!-- PASSWORD RESET SECTION -->
   <section id="resetSection" class="hidden">
     <div class="school-name">Laya Integrated School</div>
+
     <h1>Reset Password</h1>
+
     <p class="subtitle">Enter your new password below.</p>
 
     <form id="resetForm">
       <label for="newPassword">New Password</label>
-      <input id="newPassword" type="password"
-        minlength="8" autocomplete="new-password" required>
+      <input
+        id="newPassword"
+        type="password"
+        minlength="8"
+        autocomplete="new-password"
+        required
+      >
 
       <label for="confirmPassword">Confirm New Password</label>
-      <input id="confirmPassword" type="password"
-        minlength="8" autocomplete="new-password" required>
+      <input
+        id="confirmPassword"
+        type="password"
+        minlength="8"
+        autocomplete="new-password"
+        required
+      >
 
       <button id="savePasswordButton" type="submit">
         Save New Password
       </button>
+
       <div id="resetMessage" class="status" role="status"></div>
     </form>
   </section>
 
+  <!-- DASHBOARD SECTION -->
   <section id="dashboardSection" class="hidden">
     <div class="school-name">Laya Integrated School</div>
+
     <h2 id="welcomeTitle">Welcome!</h2>
+
     <p id="accountDetails"></p>
 
     <!-- ADMINISTRATOR PANEL -->
     <div id="adminPanel" class="hidden">
       <hr class="section-divider">
+
       <h2>Student Account Management</h2>
+
       <p class="subtitle">
         Create student accounts for Grades 7–10.
       </p>
 
       <form id="createStudentForm">
         <label for="studentUsername">Student Username</label>
-        <input id="studentUsername" type="text"
+
+        <input
+          id="studentUsername"
+          type="text"
           placeholder="Example: student_001"
-          minlength="4" maxlength="24"
-          pattern="[a-zA-Z0-9_]{4,24}" required>
+          minlength="4"
+          maxlength="24"
+          pattern="[a-zA-Z0-9_]{4,24}"
+          required
+        >
 
         <label for="studentName">Student Display Name</label>
-        <input id="studentName" type="text"
+
+        <input
+          id="studentName"
+          type="text"
           placeholder="Enter student's display name"
-          maxlength="80" required>
+          maxlength="80"
+          required
+        >
 
         <label for="studentGrade">Grade Level</label>
+
         <select id="studentGrade" required>
           <option value="">Select grade level</option>
           <option value="Grade 7">Grade 7</option>
@@ -198,28 +292,68 @@
         </select>
 
         <label for="studentPassword">Initial Password</label>
-        <input id="studentPassword" type="password"
+
+        <input
+          id="studentPassword"
+          type="password"
           placeholder="At least 8 characters"
-          minlength="8" maxlength="72"
-          autocomplete="new-password" required>
+          minlength="8"
+          maxlength="72"
+          autocomplete="new-password"
+          required
+        >
 
         <button id="createStudentButton" type="submit">
           Create Student Account
         </button>
 
-        <div id="createStudentMessage" class="status"
-          role="status" aria-live="polite"></div>
+        <div
+          id="createStudentMessage"
+          class="status"
+          role="status"
+          aria-live="polite"
+        ></div>
       </form>
     </div>
 
     <!-- STUDENT PANEL -->
     <div id="studentPanel" class="hidden">
       <hr class="section-divider">
-      <h2>My Learning Dashboard</h2>
+
+      <h2>My English Learning Dashboard</h2>
+
       <p>
         Welcome to your English learning space.
-        Your grade-level learning materials will appear here.
+        Select a term to access your learning materials.
       </p>
+
+      <div class="term-container">
+
+        <div class="term-card">
+          <h3>TERM 1</h3>
+          <p>
+            English lessons, reading materials, discussions,
+            and activities for Term 1.
+          </p>
+        </div>
+
+        <div class="term-card">
+          <h3>TERM 2</h3>
+          <p>
+            English lessons, reading materials, discussions,
+            and activities for Term 2.
+          </p>
+        </div>
+
+        <div class="term-card">
+          <h3>TERM 3</h3>
+          <p>
+            English lessons, reading materials, discussions,
+            and activities for Term 3.
+          </p>
+        </div>
+
+      </div>
     </div>
 
     <button id="logoutButton" class="secondary-button" type="button">
@@ -230,10 +364,12 @@
   <div class="footer">
     English Learning Portal · Grades 7–10
   </div>
+
 </main>
 
 <script>
   // SUPABASE CONNECTION
+
   const SUPABASE_URL =
     "https://njozhfubaagfusenxlxe.supabase.co";
 
@@ -256,10 +392,12 @@
     loginSection.classList.add("hidden");
     resetSection.classList.add("hidden");
     dashboardSection.classList.add("hidden");
+
     section.classList.remove("hidden");
   }
 
   // PASSWORD RECOVERY
+
   supabaseClient.auth.onAuthStateChange((event) => {
     if (event === "PASSWORD_RECOVERY") {
       showSection(resetSection);
@@ -270,10 +408,12 @@
     const hash = window.location.hash;
 
     if (hash.includes("type=recovery")) {
-      const { data, error } = await supabaseClient.auth.getSession();
+      const { data, error } =
+        await supabaseClient.auth.getSession();
 
       if (error || !data.session) {
         showSection(loginSection);
+
         document.getElementById("message").textContent =
           "This recovery link may have expired. Please request a new one.";
       } else {
@@ -285,6 +425,7 @@
   checkRecoverySession();
 
   // REQUEST PASSWORD RESET
+
   document.getElementById("forgotButton")
     .addEventListener("click", async () => {
       const email = document.getElementById("username")
@@ -313,16 +454,20 @@
     });
 
   // SAVE NEW PASSWORD
+
   document.getElementById("resetForm")
     .addEventListener("submit", async (event) => {
       event.preventDefault();
 
       const newPassword =
         document.getElementById("newPassword").value;
+
       const confirmPassword =
         document.getElementById("confirmPassword").value;
+
       const button =
         document.getElementById("savePasswordButton");
+
       const status =
         document.getElementById("resetMessage");
 
@@ -345,6 +490,7 @@
           "Password updated successfully. You can now sign in.";
 
         await supabaseClient.auth.signOut();
+
         document.getElementById("resetForm").reset();
 
         setTimeout(() => {
@@ -353,6 +499,7 @@
             document.title,
             window.location.pathname
           );
+
           showSection(loginSection);
         }, 2000);
       }
@@ -362,6 +509,7 @@
     });
 
   // SHOW THE CORRECT DASHBOARD
+
   async function showUserDashboard(user) {
     const actualEmail = (user.email || "").toLowerCase();
 
@@ -371,9 +519,12 @@
     if (actualEmail === ADMIN_EMAIL) {
       document.getElementById("welcomeTitle").textContent =
         "Welcome, Administrator!";
+
       document.getElementById("accountDetails").textContent =
         "Administrator account";
+
       document.getElementById("adminPanel").classList.remove("hidden");
+
       showSection(dashboardSection);
       return;
     }
@@ -386,30 +537,38 @@
 
     if (error || !profile) {
       await supabaseClient.auth.signOut();
+
       showSection(loginSection);
+
       document.getElementById("message").textContent =
         "No student profile was found. Please contact your administrator.";
+
       return;
     }
 
     document.getElementById("welcomeTitle").textContent =
       "Welcome, " + profile.display_name + "!";
+
     document.getElementById("accountDetails").textContent =
       "Username: " + profile.username + " | " + profile.grade_level;
 
     document.getElementById("studentPanel").classList.remove("hidden");
+
     showSection(dashboardSection);
   }
 
   // LOGIN
+
   document.getElementById("loginForm")
     .addEventListener("submit", async (event) => {
       event.preventDefault();
 
       const username =
         document.getElementById("username").value.trim();
+
       const password =
         document.getElementById("password").value;
+
       const button = document.getElementById("loginButton");
       const message = document.getElementById("message");
 
@@ -433,7 +592,8 @@
         await showUserDashboard(data.user);
 
       } catch (error) {
-        message.textContent = error.message || "Unable to sign in.";
+        message.textContent =
+          error.message || "Unable to sign in.";
       } finally {
         button.disabled = false;
         button.textContent = "Sign In";
@@ -441,21 +601,26 @@
     });
 
   // CREATE STUDENT ACCOUNT
+
   document.getElementById("createStudentForm")
     .addEventListener("submit", async (event) => {
       event.preventDefault();
 
       const button =
         document.getElementById("createStudentButton");
+
       const status =
         document.getElementById("createStudentMessage");
 
       const studentData = {
         username: document.getElementById("studentUsername")
           .value.trim().toLowerCase(),
+
         display_name: document.getElementById("studentName")
           .value.trim(),
+
         grade_level: document.getElementById("studentGrade").value,
+
         password: document.getElementById("studentPassword").value
       };
 
@@ -473,7 +638,10 @@
         if (error) {
           let detail = error.message;
 
-          if (error.context && typeof error.context.json === "function") {
+          if (
+            error.context &&
+            typeof error.context.json === "function"
+          ) {
             try {
               const responseBody = await error.context.json();
               detail = responseBody.error || detail;
@@ -484,7 +652,9 @@
         }
 
         if (!data || !data.success) {
-          throw new Error(data?.error || "Account creation failed.");
+          throw new Error(
+            data?.error || "Account creation failed."
+          );
         }
 
         status.textContent =
@@ -503,14 +673,18 @@
     });
 
   // SIGN OUT
+
   document.getElementById("logoutButton")
     .addEventListener("click", async () => {
       await supabaseClient.auth.signOut();
+
       document.getElementById("loginForm").reset();
       document.getElementById("createStudentMessage").textContent = "";
       document.getElementById("message").textContent = "";
+
       showSection(loginSection);
     });
 </script>
+
 </body>
 </html>
