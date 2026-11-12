@@ -27,7 +27,7 @@
 
     .login-card {
       width: 100%;
-      max-width: 520px;
+      max-width: 600px;
       padding: 32px;
       background: white;
       border-radius: 18px;
@@ -128,16 +128,14 @@
       display: none !important;
     }
 
-    /* STUDENT TERM DASHBOARD */
-
     .term-container {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 15px;
       margin-top: 22px;
     }
 
-    .term-card {
+    .term-card, .stage-card {
       padding: 20px;
       border: 1px solid #dce5dd;
       border-left: 5px solid #245748;
@@ -145,17 +143,49 @@
       background: #f8faf7;
     }
 
-    .term-card h3 {
+    .term-card h3, .stage-card h3 {
       margin: 0 0 8px;
       color: #173b32;
-      font-size: 18px;
+      font-size: 17px;
     }
 
-    .term-card p {
+    .term-card p, .stage-card p {
       margin: 0;
       color: #68736c;
       font-size: 13px;
       line-height: 1.5;
+    }
+
+    .step-up-heading {
+      margin-top: 28px;
+    }
+
+    .step-up-intro {
+      color: #68736c;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .stage-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .stage-card {
+      border-left-color: #a47b35;
+      background: #fbfaf6;
+    }
+
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 22px;
+      }
+
+      .term-container {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -318,15 +348,17 @@
 
     <!-- STUDENT PANEL -->
     <div id="studentPanel" class="hidden">
+
       <hr class="section-divider">
 
       <h2>My English Learning Dashboard</h2>
 
       <p>
         Welcome to your English learning space.
-        Select a term to access your learning materials.
+        Select a learning area below.
       </p>
 
+      <!-- ENGLISH TERMS -->
       <div class="term-container">
 
         <div class="term-card">
@@ -354,6 +386,53 @@
         </div>
 
       </div>
+
+      <!-- STEP-UP READING INTERVENTION -->
+      <hr class="section-divider">
+
+      <h2 class="step-up-heading">
+        STEP-UP Reading Intervention Program
+      </h2>
+
+      <p class="step-up-intro">
+        Explore the reading intervention materials
+        organized according to reading stages.
+      </p>
+
+      <div class="stage-container">
+
+        <div class="stage-card">
+          <h3>STAGE 1 — WORD</h3>
+          <p>Reading intervention materials</p>
+        </div>
+
+        <div class="stage-card">
+          <h3>STAGE 2 — CORE SENTENCE</h3>
+          <p>Reading intervention materials</p>
+        </div>
+
+        <div class="stage-card">
+          <h3>STAGE 3 — SENTENCE EXPANSION</h3>
+          <p>Reading intervention materials</p>
+        </div>
+
+        <div class="stage-card">
+          <h3>STAGE 4 — CONNECTING IDEAS</h3>
+          <p>Reading intervention materials</p>
+        </div>
+
+        <div class="stage-card">
+          <h3>STAGE 5 — PARAGRAPH</h3>
+          <p>Reading intervention materials</p>
+        </div>
+
+        <div class="stage-card">
+          <h3>STAGE 6 — TEXT &amp; RESPONSE</h3>
+          <p>Reading intervention materials</p>
+        </div>
+
+      </div>
+
     </div>
 
     <button id="logoutButton" class="secondary-button" type="button">
