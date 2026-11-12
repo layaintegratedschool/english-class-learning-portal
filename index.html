@@ -5,369 +5,125 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173b32">
   <title>English Class Learning Portal</title>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-      background: #f4f5f0;
-      color: #202923;
-      font-family: Arial, sans-serif;
-    }
-
-    .login-card {
-      width: 100%;
-      max-width: 700px;
-      padding: 32px;
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 10px 35px rgba(0,0,0,.08);
-    }
-
-    .school-name {
-      color: #245748;
-      font-size: 12px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    h1 { margin: 10px 0; color: #173b32; font-size: 27px; }
-    h2 { color: #173b32; }
-    h3 { color: #173b32; }
-
-    .subtitle {
-      color: #68736c;
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 25px;
-    }
-
-    label {
-      display: block;
-      margin: 15px 0 6px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #dce2dc;
-      border-radius: 10px;
-      font-size: 15px;
-      background: white;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 18px;
-      padding: 13px;
-      border: 0;
-      border-radius: 10px;
-      background: #173b32;
-      color: white;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 20px; background: #f4f5f0; color: #202923; font-family: Arial, sans-serif; }
+    .login-card { width: 100%; max-width: 850px; padding: 32px; background: white; border-radius: 18px; box-shadow: 0 10px 35px rgba(0,0,0,.08); }
+    .school-name { color: #245748; font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
+    h1 { margin: 10px 0; color: #173b32; font-size: 27px; } h2, h3 { color: #173b32; }
+    .subtitle { color: #68736c; font-size: 14px; line-height: 1.5; margin-bottom: 25px; }
+    label { display: block; margin: 15px 0 6px; font-size: 13px; font-weight: bold; }
+    input, select { width: 100%; padding: 13px; border: 1px solid #dce2dc; border-radius: 10px; font-size: 15px; background: white; }
+    button { width: 100%; margin-top: 18px; padding: 13px; border: 0; border-radius: 10px; background: #173b32; color: white; font-size: 15px; font-weight: bold; cursor: pointer; }
     button:disabled { opacity: .6; cursor: wait; }
     .secondary-button { background: #68736c; }
-    .text-button {
-      background: transparent;
-      color: #245748;
-      margin-top: 10px;
-      padding: 8px;
-    }
-
-    .section-divider {
-      border: 0;
-      border-top: 1px solid #e3e8e3;
-      margin: 25px 0;
-    }
-
-    .status {
-      min-height: 22px;
-      margin-top: 12px;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .footer {
-      margin-top: 25px;
-      color: #879087;
-      font-size: 11px;
-      text-align: center;
-    }
-
+    .text-button { background: transparent; color: #245748; margin-top: 10px; padding: 8px; }
+    .section-divider { border: 0; border-top: 1px solid #e3e8e3; margin: 25px 0; }
+    .status { min-height: 22px; margin-top: 12px; font-size: 13px; line-height: 1.5; }
+    .footer { margin-top: 25px; color: #879087; font-size: 11px; text-align: center; }
     .hidden { display: none !important; }
-
-    .term-container {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 15px;
-      margin-top: 22px;
-    }
-
-    .term-card, .stage-card {
-      padding: 20px;
-      border: 1px solid #dce5dd;
-      border-left: 5px solid #245748;
-      border-radius: 12px;
-      background: #f8faf7;
-    }
-
-    .term-card {
-      width: 100%;
-      margin: 0;
-      color: inherit;
-      text-align: left;
-      cursor: pointer;
-      transition: background .15s ease, transform .15s ease;
-    }
-
-    .term-card:hover, .week-card:hover {
-      background: #edf4ee;
-      transform: translateY(-2px);
-    }
-
-    .term-card h3, .stage-card h3 {
-      margin: 0 0 8px;
-      color: #173b32;
-      font-size: 17px;
-    }
-
-    .term-card p, .stage-card p {
-      margin: 0;
-      color: #68736c;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
+    .term-container { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; margin-top: 22px; }
+    .term-card, .stage-card { padding: 20px; border: 1px solid #dce5dd; border-left: 5px solid #245748; border-radius: 12px; background: #f8faf7; }
+    .term-card { width: 100%; margin: 0; color: inherit; text-align: left; cursor: pointer; transition: background .15s ease, transform .15s ease; }
+    .term-card:hover, .week-card:hover { background: #edf4ee; transform: translateY(-2px); }
+    .term-card h3, .stage-card h3 { margin: 0 0 8px; color: #173b32; font-size: 17px; }
+    .term-card p, .stage-card p { margin: 0; color: #68736c; font-size: 13px; line-height: 1.5; }
     .step-up-heading { margin-top: 28px; }
-
-    .step-up-intro {
-      color: #68736c;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .stage-container {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .stage-card {
-      border-left-color: #a47b35;
-      background: #fbfaf6;
-    }
-
-    .view-heading {
-      margin-bottom: 6px;
-    }
-
-    .view-description {
-      color: #68736c;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .week-container {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .week-card {
-      width: 100%;
-      margin: 0;
-      padding: 17px;
-      border: 1px solid #dce5dd;
-      border-left: 5px solid #245748;
-      border-radius: 11px;
-      background: #f8faf7;
-      color: #173b32;
-      text-align: left;
-      transition: background .15s ease, transform .15s ease;
-    }
-
-    .week-card span {
-      display: block;
-      margin-top: 5px;
-      color: #68736c;
-      font-size: 12px;
-      font-weight: normal;
-    }
-
-    .back-button {
-      width: auto;
-      margin: 8px 0 12px;
-      padding: 10px 15px;
-      background: #68736c;
-    }
-
-    .lesson-placeholder {
-      margin-top: 20px;
-      padding: 22px;
-      border: 1px solid #dce5dd;
-      border-radius: 12px;
-      background: #f8faf7;
-      line-height: 1.6;
-    }
-
-    .lesson-placeholder p {
-      color: #68736c;
-      font-size: 14px;
-    }
-
-    @media (max-width: 480px) {
-      .login-card { padding: 22px; }
-      .term-container, .week-container { grid-template-columns: 1fr; }
-    }
+    .step-up-intro { color: #68736c; font-size: 14px; line-height: 1.5; }
+    .stage-container { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 18px; }
+    .stage-card { border-left-color: #a47b35; background: #fbfaf6; }
+    .view-heading { margin-bottom: 6px; }
+    .view-description { color: #68736c; font-size: 14px; line-height: 1.5; }
+    .week-container { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+    .week-card { width: 100%; margin: 0; padding: 17px; border: 1px solid #dce5dd; border-left: 5px solid #245748; border-radius: 11px; background: #f8faf7; color: #173b32; text-align: left; transition: background .15s ease, transform .15s ease; }
+    .week-card span { display: block; margin-top: 5px; color: #68736c; font-size: 12px; font-weight: normal; line-height: 1.4; }
+    .back-button { width: auto; margin: 8px 0 12px; padding: 10px 15px; background: #68736c; }
+    .lesson-content { margin-top: 18px; line-height: 1.65; }
+    .lesson-banner { padding: 18px; background: #f1f6f1; border-left: 5px solid #245748; border-radius: 10px; }
+    .lesson-banner p { margin-bottom: 0; color: #526057; }
+    .lesson-section { margin-top: 22px; padding: 18px; border: 1px solid #e1e8e1; border-radius: 12px; }
+    .lesson-section h3 { margin-top: 0; }
+    .lesson-section p { margin-bottom: 0; }
+    .objective-list { padding-left: 22px; line-height: 1.7; }
+    .question-card { margin: 12px 0; padding: 15px; background: #f8faf7; border: 1px solid #e1e8e1; border-radius: 10px; }
+    .question-card p { margin-top: 0; font-weight: bold; }
+    .choice-list { margin: 8px 0 0; padding-left: 24px; }
+    .choice-list li { margin: 6px 0; }
+    .task-box { padding: 18px; background: #fbfaf6; border-left: 5px solid #a47b35; border-radius: 10px; }
+    .note { color: #68736c; font-size: 12px; line-height: 1.5; }
+    @media (max-width: 520px) { .login-card { padding: 22px; } .term-container, .week-container { grid-template-columns: 1fr; } }
   </style>
 </head>
-
 <body>
 <main class="login-card">
-
-  <!-- LOGIN SECTION -->
   <section id="loginSection">
     <div class="school-name">Laya Integrated School</div>
     <h1>English Class Portal</h1>
-    <p class="subtitle">
-      Welcome! Sign in to access your English learning materials
-      and classroom resources.
-    </p>
-
+    <p class="subtitle">Welcome! Sign in to access your English learning materials and classroom resources.</p>
     <form id="loginForm">
       <label for="username">Username or Email</label>
-      <input id="username" type="text"
-        placeholder="Enter your username or email"
-        autocomplete="username" required>
-
+      <input id="username" type="text" placeholder="Enter your username or email" autocomplete="username" required>
       <label for="password">Password</label>
-      <input id="password" type="password"
-        placeholder="Enter your password"
-        autocomplete="current-password" required>
-
+      <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
       <button id="loginButton" type="submit">Sign In</button>
-      <button class="text-button" id="forgotButton" type="button">
-        Forgot Password?
-      </button>
+      <button class="text-button" id="forgotButton" type="button">Forgot Password?</button>
       <div id="message" class="status" role="status"></div>
     </form>
   </section>
 
-  <!-- PASSWORD RESET SECTION -->
   <section id="resetSection" class="hidden">
     <div class="school-name">Laya Integrated School</div>
     <h1>Reset Password</h1>
     <p class="subtitle">Enter your new password below.</p>
-
     <form id="resetForm">
       <label for="newPassword">New Password</label>
-      <input id="newPassword" type="password" minlength="8"
-        autocomplete="new-password" required>
-
+      <input id="newPassword" type="password" minlength="8" autocomplete="new-password" required>
       <label for="confirmPassword">Confirm New Password</label>
-      <input id="confirmPassword" type="password" minlength="8"
-        autocomplete="new-password" required>
-
-      <button id="savePasswordButton" type="submit">
-        Save New Password
-      </button>
+      <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required>
+      <button id="savePasswordButton" type="submit">Save New Password</button>
       <div id="resetMessage" class="status" role="status"></div>
     </form>
   </section>
 
-  <!-- DASHBOARD SECTION -->
   <section id="dashboardSection" class="hidden">
     <div class="school-name">Laya Integrated School</div>
     <h2 id="welcomeTitle">Welcome!</h2>
     <p id="accountDetails"></p>
 
-    <!-- ADMINISTRATOR PANEL -->
     <div id="adminPanel" class="hidden">
       <hr class="section-divider">
       <h2>Student Account Management</h2>
       <p class="subtitle">Create student accounts for Grades 7–10.</p>
-
       <form id="createStudentForm">
         <label for="studentUsername">Student Username</label>
-        <input id="studentUsername" type="text"
-          placeholder="Example: student_001" minlength="4" maxlength="24"
-          pattern="[a-zA-Z0-9_]{4,24}" required>
-
+        <input id="studentUsername" type="text" placeholder="Example: student_001" minlength="4" maxlength="24" pattern="[a-zA-Z0-9_]{4,24}" required>
         <label for="studentName">Student Display Name</label>
-        <input id="studentName" type="text"
-          placeholder="Enter student's display name" maxlength="80" required>
-
+        <input id="studentName" type="text" placeholder="Enter student's display name" maxlength="80" required>
         <label for="studentGrade">Grade Level</label>
         <select id="studentGrade" required>
-          <option value="">Select grade level</option>
-          <option value="Grade 7">Grade 7</option>
-          <option value="Grade 8">Grade 8</option>
-          <option value="Grade 9">Grade 9</option>
-          <option value="Grade 10">Grade 10</option>
+          <option value="">Select grade level</option><option value="Grade 7">Grade 7</option><option value="Grade 8">Grade 8</option><option value="Grade 9">Grade 9</option><option value="Grade 10">Grade 10</option>
         </select>
-
         <label for="studentPassword">Initial Password</label>
-        <input id="studentPassword" type="password"
-          placeholder="At least 8 characters" minlength="8" maxlength="72"
-          autocomplete="new-password" required>
-
-        <button id="createStudentButton" type="submit">
-          Create Student Account
-        </button>
-        <div id="createStudentMessage" class="status"
-          role="status" aria-live="polite"></div>
+        <input id="studentPassword" type="password" placeholder="At least 8 characters" minlength="8" maxlength="72" autocomplete="new-password" required>
+        <button id="createStudentButton" type="submit">Create Student Account</button>
+        <div id="createStudentMessage" class="status" role="status" aria-live="polite"></div>
       </form>
     </div>
 
-    <!-- STUDENT PANEL -->
     <div id="studentPanel" class="hidden">
       <hr class="section-divider">
-
-      <!-- MAIN STUDENT DASHBOARD -->
       <div id="studentHome">
         <h2>My English Learning Dashboard</h2>
         <p>Welcome to your English learning space. Select a learning area below.</p>
-
         <div class="term-container">
-          <button class="term-card" type="button" data-term="1">
-            <h3>TERM 1</h3>
-            <p>English lessons, reading materials, discussions, and activities for Term 1.</p>
-          </button>
-
-          <button class="term-card" type="button" data-term="2">
-            <h3>TERM 2</h3>
-            <p>English lessons, reading materials, discussions, and activities for Term 2.</p>
-          </button>
-
-          <button class="term-card" type="button" data-term="3">
-            <h3>TERM 3</h3>
-            <p>English lessons, reading materials, discussions, and activities for Term 3.</p>
-          </button>
+          <button class="term-card" type="button" data-term="1"><h3>TERM 1</h3><p>English lessons, reading materials, discussions, and activities for Term 1.</p></button>
+          <button class="term-card" type="button" data-term="2"><h3>TERM 2</h3><p>English lessons, reading materials, discussions, and activities for Term 2.</p></button>
+          <button class="term-card" type="button" data-term="3"><h3>TERM 3</h3><p>English lessons, reading materials, discussions, and activities for Term 3.</p></button>
         </div>
-
         <hr class="section-divider">
-
         <h2 class="step-up-heading">STEP-UP Reading Intervention Program</h2>
-        <p class="step-up-intro">
-          Explore the reading intervention materials organized according to reading stages.
-        </p>
-
+        <p class="step-up-intro">Explore the reading intervention materials organized according to reading stages.</p>
         <div class="stage-container">
           <div class="stage-card"><h3>STAGE 1 — WORD</h3><p>Reading intervention materials</p></div>
           <div class="stage-card"><h3>STAGE 2 — CORE SENTENCE</h3><p>Reading intervention materials</p></div>
@@ -378,61 +134,38 @@
         </div>
       </div>
 
-      <!-- WEEK LIST VIEW -->
       <div id="weeksView" class="hidden">
-        <button id="backToTermsButton" class="back-button" type="button">
-          ← Back to Dashboard
-        </button>
+        <button id="backToTermsButton" class="back-button" type="button">← Back to Dashboard</button>
         <h2 id="weeksTitle" class="view-heading">TERM 1</h2>
-        <p class="view-description">
-          Select a week to open its learning page.
-        </p>
+        <p class="view-description" id="weeksDescription">Select a week to open its learning page.</p>
         <div id="weekContainer" class="week-container"></div>
       </div>
 
-      <!-- INDIVIDUAL WEEK VIEW -->
       <div id="weekDetailView" class="hidden">
-        <button id="backToWeeksButton" class="back-button" type="button">
-          ← Back to Weeks
-        </button>
+        <button id="backToWeeksButton" class="back-button" type="button">← Back to Weeks</button>
         <h2 id="weekDetailTitle" class="view-heading">TERM 1 — WEEK 1</h2>
-        <div class="lesson-placeholder">
-          <h3>Weekly Learning Materials</h3>
-          <p>
-            This is the learning page for this week. Lesson content,
-            reading materials, and activities can be added here.
-          </p>
-          <p><strong>Content status:</strong> Waiting for learning materials to be added.</p>
-        </div>
+        <div id="lessonContent" class="lesson-content"></div>
       </div>
     </div>
 
-    <button id="logoutButton" class="secondary-button" type="button">
-      Sign Out
-    </button>
+    <button id="logoutButton" class="secondary-button" type="button">Sign Out</button>
   </section>
-
   <div class="footer">English Learning Portal · Grades 7–10</div>
 </main>
 
 <script>
-  // SUPABASE CONNECTION
   const SUPABASE_URL = "https://njozhfubaagfusenxlxe.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_g5yQydfOR_iHCtZOvLHWTA_WQ9_Akng";
+  const ADMIN_EMAIL = "layaintegratedschool@gmail.com".trim().toLowerCase();
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_g5yQydfOR_iHCtZOvLHWTA_WQ9_Akng";
-
-  const ADMIN_EMAIL =
-    "layaintegratedschool@gmail.com".trim().toLowerCase();
-
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+  // Student-facing Grade 7 Term 1 lesson content. Correct answers are not included here.
+  const GRADE7_TERM1 = [{"week":1,"title":"Literature, Prose, Poetry, and My Father Goes to Court","overview":"Literature is written or spoken work that expresses ideas, emotions, experiences, and culture. Prose uses sentences and paragraphs; poetry uses lines and may use rhythm, sound patterns, and imagery.","objectives":["Define literature in simple terms.","Distinguish prose from poetry.","Recall important details from My Father Goes to Court.","Identify the five basic elements of a short story."],"lessons":[{"heading":"What is literature?","body":"Literature is a form of expression. Through stories, poems, and other texts, people share experiences, beliefs, feelings, and values. Literature may reflect the life of an individual or a community."},{"heading":"Prose and poetry","body":"Prose is written in sentences and paragraphs, as in short stories and novels. Poetry is commonly arranged in lines and stanzas and may use rhythm, rhyme, imagery, and carefully chosen words. Not all poems rhyme."},{"heading":"Reading connection: My Father Goes to Court","body":"The lesson uses Carlos Bulosan’s story to explore two neighboring families: one poor but lively and close, and one wealthy but unhappy. The court conflict begins when the rich neighbor complains that the poor family enjoys the smell of food from his cooking. The story invites readers to think about fairness and whether happiness can be measured by money."},{"heading":"Five elements of a short story","body":"Character: who takes part in the story. Setting: where and when it happens. Plot: the sequence of events. Conflict: the main problem or struggle. Theme: the message or insight the story communicates."}],"practice":[{"q":"A text written in paragraphs and ordinary sentences is usually _____.","choices":["prose","poetry","rhyme","stanza"]},{"q":"The people or figures who take part in a story are its _____.","choices":["setting","characters","theme","meter"]},{"q":"The main problem in a story is the _____.","choices":["conflict","setting","speaker","stanza"]},{"q":"The message about life that a story communicates is its _____.","choices":["plot","theme","character","rhyme"]}],"task":"Create a five-part story map for My Father Goes to Court. Write one brief note for character, setting, plot, conflict, and theme. Use details from the story rather than guesses.","quiz":[{"question":"Which statement best describes literature?","options":["It expresses human ideas, feelings, experiences, or culture.","It is only writing that rhymes.","It contains only made-up events.","It is a list of unrelated words."]},{"question":"Which is a common feature of prose?","options":["It is arranged mainly in sentences and paragraphs.","It must have a fixed rhyme scheme.","It is always divided into stanzas.","It must be sung."]},{"question":"Which is commonly associated with poetry?","options":["Lines and stanzas","Only long paragraphs","A list of instructions","A news headline"]},{"question":"What is the setting of a story?","options":["The time and place","The lesson or message","The main problem","The sequence of events"]},{"question":"What does conflict refer to?","options":["A struggle or problem","The author’s name","The story’s location","The final sentence"]},{"question":"Which element tells what the story suggests about life?","options":["Theme","Plot","Setting","Character"]},{"question":"In My Father Goes to Court, what causes the disagreement?","options":["The rich neighbor objects to the poor family enjoying the smell of his food.","The families argue about a lost animal.","The children damage a house.","The farmer refuses to move."]},{"question":"Which value is emphasized by the story?","options":["Happiness and family closeness are not measured only by wealth.","Only rich people can be happy.","Money solves every problem.","Neighbors should never help one another."]}]},{"week":2,"title":"Structuralist Context, Plot, Character, and Characterization in My Father Goes to Court","overview":"A structuralist reading looks at how parts of a literary text work together. Plot, character, setting, conflict, and theme connect to create meaning.","objectives":["Explain how story elements work together.","Identify the five parts of plot.","Distinguish character types.","Differentiate direct and indirect characterization."],"lessons":[{"heading":"Structuralist context","body":"A structuralist approach studies how the parts of a text are organized and related. Instead of looking at only one character or event, readers examine how plot, setting, characters, conflict, and theme support one another."},{"heading":"The five parts of plot","body":"Exposition introduces characters and setting. Rising action develops events that build tension. Climax is the turning point or most intense moment. Falling action shows events after the climax. Resolution presents the outcome or ending."},{"heading":"Character types","body":"A protagonist is the central character. An antagonist opposes the protagonist or creates the main obstacle. A round character has several developed traits. A flat character is presented with only a few traits. A dynamic character changes significantly; a static character remains mostly the same."},{"heading":"Characterization","body":"Direct characterization tells readers a character’s traits. Indirect characterization lets readers infer traits from actions, speech, thoughts, appearance, and how others react to the character."}],"practice":[{"q":"The part of the plot that introduces the characters and setting is the _____.","choices":["exposition","climax","falling action","resolution"]},{"q":"A character who changes significantly is _____.","choices":["static","dynamic","flat","minor"]},{"q":"When a narrator says, “Mina was generous,” the characterization is _____.","choices":["direct","indirect","symbolic","dramatic"]},{"q":"A character who opposes the main character is the _____.","choices":["protagonist","antagonist","narrator","speaker"]}],"task":"Draw a plot mountain for My Father Goes to Court. Label exposition, rising action, climax, falling action, and resolution. Add one event or detail under each label.","quiz":[{"question":"What does a structuralist reading examine?","options":["How parts of a text work together","Only the author’s biography","Only the reader’s feelings","The number of pages"]},{"question":"Which plot part introduces characters and setting?","options":["Exposition","Climax","Falling action","Resolution"]},{"question":"Which plot part is the turning point?","options":["Climax","Exposition","Rising action","Resolution"]},{"question":"Who is the central character in a story?","options":["Protagonist","Antagonist","Narrator","Foil"]},{"question":"A character with many developed traits is _____.","options":["round","flat","static","unnamed"]},{"question":"A character who remains mostly unchanged is _____.","options":["static","dynamic","round","protagonist"]},{"question":"“The boy was honest” is an example of ____ characterization.","options":["direct","indirect","setting-based","plot-based"]},{"question":"A character’s actions reveal that she is kind. This is ____ characterization.","options":["indirect","direct","expository","structural"]}]},{"week":3,"title":"Conflict in How My Brother Leon Brought Home a Wife","overview":"Conflict is a struggle that creates tension and moves a narrative forward. In Manuel E. Arguilla’s story, the arrival of Maria in Leon’s rural home brings differences in background, expectations, and adjustment into focus.","objectives":["Define conflict in a narrative.","Identify internal and external conflict.","Recognize character-versus-character, society, and nature conflicts.","Support interpretations with story details."],"lessons":[{"heading":"What is conflict?","body":"Conflict is a problem, disagreement, or struggle faced by a character. It gives a story direction because characters must respond to challenges."},{"heading":"Internal and external conflict","body":"Internal conflict happens within a character’s mind or feelings, such as fear, doubt, or a difficult decision. External conflict happens between a character and an outside force."},{"heading":"Types of external conflict","body":"Character versus character: two characters oppose one another. Character versus society: a character struggles against rules, customs, or social expectations. Character versus nature: a character faces a natural force or condition. Other possible types include character versus technology and character versus supernatural forces."},{"heading":"Applying the idea to the story","body":"In How My Brother Leon Brought Home a Wife, Maria enters a rural family setting that is unfamiliar to her. The journey and the family’s response allow readers to examine adjustment, acceptance, expectations, and differences between rural and city life. Use specific events from the assigned text when identifying a conflict."}],"practice":[{"q":"A character is unsure whether to tell the truth. This is ____ conflict.","choices":["internal","external","nature","society"]},{"q":"Two characters argue over a decision. This is _____.","choices":["character versus nature","character versus character","character versus technology","character versus supernatural"]},{"q":"A person struggles against an unfair community rule. This is _____.","choices":["character versus society","character versus nature","internal conflict","character versus technology"]}],"task":"Choose one conflict shown in How My Brother Leon Brought Home a Wife. Describe the problem, identify the characters or forces involved, classify the conflict, and cite one story detail.","quiz":[{"question":"What is conflict?","options":["A struggle or problem in a story","The place where a story happens","The lesson at the end","The list of characters"]},{"question":"A struggle inside a character’s mind is ____ conflict.","options":["internal","external","natural","social"]},{"question":"A character facing a storm experiences _____.","options":["character versus nature","character versus society","character versus technology","character versus character"]},{"question":"A disagreement between two people is _____.","options":["character versus character","character versus nature","character versus society","internal conflict"]},{"question":"A character challenging an unfair tradition faces _____.","options":["character versus society","character versus nature","character versus technology","character versus supernatural"]},{"question":"Why is conflict important?","options":["It develops events and gives characters challenges to face.","It removes the need for characters.","It tells only the author’s name.","It always makes the story funny."]},{"question":"Maria’s adjustment to a rural family environment can help readers examine _____.","options":["differences in background and expectations","the use of computer technology","space exploration","a supernatural event"]}]},{"week":4,"title":"Conflict and Point of View in Narrative Texts","overview":"Point of view is the position from which a story is narrated. It affects which information readers receive and how they understand characters and events.","objectives":["Review internal and external conflict.","Define first-person, second-person, third-person limited, and third-person omniscient point of view.","Use pronouns and narration clues to identify point of view.","Rewrite a short passage using a different third-person point of view."],"lessons":[{"heading":"Point of view","body":"Point of view (POV) is the perspective of the narrator. It answers the question: Who is telling the story, and what can that narrator know?"},{"heading":"First-person POV","body":"The narrator is a character in the story and uses I, me, my, or we. Readers learn events through that narrator’s experience."},{"heading":"Second-person POV","body":"The narrator addresses the reader as you. This point of view is less common in traditional stories."},{"heading":"Third-person limited POV","body":"The narrator uses he, she, they, or a character’s name and reveals the thoughts and feelings of one particular character."},{"heading":"Third-person omniscient POV","body":"The narrator is outside the story and can reveal the thoughts and feelings of several characters. The narrator may know more than any one character."},{"heading":"How POV changes a story","body":"The same event can feel different when told by different narrators. A first-person narrator may know only what they personally observe, while an omniscient narrator may explain what several characters think."}],"practice":[{"q":"“I walked home after class.” Which POV is used?","choices":["first person","second person","third-person limited","third-person omniscient"]},{"q":"“You open the door and see a letter.” Which POV is used?","choices":["first person","second person","third-person limited","third-person omniscient"]},{"q":"A narrator reveals only Ana’s thoughts. Which POV is used?","choices":["first person","second person","third-person limited","third-person omniscient"]},{"q":"A narrator reveals the thoughts of Ana, Ben, and their teacher. Which POV is used?","choices":["first person","second person","third-person limited","third-person omniscient"]}],"task":"Rewrite a short event from a familiar story in third-person limited POV. Focus on what one character sees, thinks, and feels. Then explain how the narration limits the information readers receive.","quiz":[{"question":"What does point of view identify?","options":["The perspective from which a story is told","The story’s setting","The order of plot events","The author’s purpose only"]},{"question":"Which pronouns often signal first-person narration?","options":["I, me, my, we","You, your","He, she, they","It, its only"]},{"question":"Which POV directly addresses the reader as “you”?","options":["Second person","First person","Third-person limited","Third-person omniscient"]},{"question":"A narrator reveals the thoughts of only one character. This is _____.","options":["third-person limited","first person","second person","third-person omniscient"]},{"question":"A narrator knows the thoughts of several characters. This is _____.","options":["third-person omniscient","third-person limited","second person","first person"]},{"question":"Which POV is most limited to the narrator-character’s own experience?","options":["First person","Third-person omniscient","Second person","Omniscient"]},{"question":"Why does POV matter?","options":["It controls what readers know and how events are presented.","It determines the number of chapters.","It always reveals the ending first.","It removes conflict."]}]},{"week":5,"title":"Poetry: Basic Elements","overview":"Poetry uses carefully selected language and structure to communicate ideas, feelings, and experiences. Readers examine form, lines, stanzas, figurative language, and theme.","objectives":["Define poetry and identify its basic structure.","Distinguish poetic form, line, and stanza.","Recognize figurative language and theme.","Analyze selected poems using textual evidence."],"lessons":[{"heading":"Poetry","body":"Poetry is a literary form that uses carefully chosen words, images, sounds, and structure to express ideas and emotions. A poem may tell a story, express feelings, or present a dramatic situation."},{"heading":"Form, line, and stanza","body":"Poetic form is the way a poem is organized. A line is one row of words in a poem. A stanza is a group of lines, similar to a paragraph in prose."},{"heading":"Figurative language","body":"Figurative language communicates meaning beyond the literal meaning of words. A simile compares using like or as. A metaphor makes a direct comparison. Personification gives human qualities to nonhuman things."},{"heading":"Theme","body":"Theme is the central insight or message about life that a poem communicates. A theme should be stated as a complete idea, not just one word such as love or courage."},{"heading":"Reading poems closely","body":"When analyzing a poem, notice its form, line and stanza arrangement, word choice, images, sound, speaker, and repeated ideas. Support your interpretation with a word, line, or detail from the poem."}],"practice":[{"q":"A group of lines in a poem is a _____.","choices":["stanza","paragraph","chapter","scene"]},{"q":"One row of words in a poem is a _____.","choices":["line","stanza","plot","chapter"]},{"q":"“Her smile is like sunshine” uses _____.","choices":["simile","metaphor","personification","hyperbole"]},{"q":"The central insight about life in a poem is its _____.","choices":["theme","line","rhyme","speaker"]}],"task":"Select a poem assigned by your teacher. Identify its form or arrangement, one striking image or figure of speech, and a possible theme. Explain each answer using evidence from the poem.","quiz":[{"question":"What is poetry?","options":["A literary form using language, sound, images, and structure to express ideas or feelings","A text that must always rhyme","A list of facts only","A paragraph with no structure"]},{"question":"What is a line in poetry?","options":["One row of words","A group of chapters","The message of a poem","The title of a poem"]},{"question":"What is a stanza?","options":["A group of lines","A single letter","The author’s biography","The conflict only"]},{"question":"Which sentence contains a simile?","options":["The clouds are like cotton.","The clouds are cotton.","The clouds danced.","The clouds shouted loudly."]},{"question":"Which sentence contains personification?","options":["The wind whispered through the trees.","The wind was cold.","The wind moved the leaves.","The wind came at noon."]},{"question":"A theme is best expressed as _____.","options":["a complete insight about life","one isolated word","the poem’s title only","the number of stanzas"]},{"question":"Which detail can support an interpretation of a poem?","options":["A word, image, or line from the poem","A guess unrelated to the text","The reader’s favorite color","The page number alone"]}]},{"week":6,"title":"Poetry: Literary Devices","overview":"Literary devices help poets create meaning, sound, emphasis, and imagery. Recognizing them helps readers explain how a poem affects its audience.","objectives":["Recognize common figures of speech and sound devices.","Explain how imagery and symbolism contribute to meaning.","Identify rhyme and rhythm patterns in selected lines.","Support interpretations with examples."],"lessons":[{"heading":"Figures of speech","body":"A simile compares two unlike things using like or as. A metaphor compares directly. Personification gives human qualities to something nonhuman. Hyperbole is deliberate exaggeration for emphasis."},{"heading":"Sound devices","body":"Alliteration repeats beginning consonant sounds in nearby words. Assonance repeats vowel sounds. Onomatopoeia uses words that imitate sounds, such as buzz or splash. Rhyme repeats similar ending sounds."},{"heading":"Imagery and symbolism","body":"Imagery uses descriptive language that appeals to the senses: sight, sound, smell, taste, and touch. A symbol is an object, person, or image that represents a larger idea."},{"heading":"Point of view and narrative techniques","body":"A poem may use first-, second-, or third-person point of view. Narrative techniques such as dialogue, imagery, and symbolism help present a speaker, situation, or sequence of events."},{"heading":"Analyzing a device","body":"Do not stop after naming a device. Explain what words show it and what effect it creates. For example, repeated soft sounds may create a gentle mood, while a strong image may help readers picture a scene."}],"practice":[{"q":"“The bees buzzed by” uses _____.","choices":["onomatopoeia","metaphor","hyperbole","symbolism"]},{"q":"“Peter Piper picked…” repeats beginning consonant sounds. This is _____.","choices":["alliteration","assonance","imagery","metaphor"]},{"q":"A repeated vowel sound is called _____.","choices":["assonance","alliteration","rhyme","symbolism"]},{"q":"A dove used to represent peace is an example of _____.","choices":["symbolism","hyperbole","onomatopoeia","meter"]}],"task":"Create a poetry one-pager. Include one example each of a figure of speech, a sound device, imagery, and symbolism. Label each and explain its effect in one sentence.","quiz":[{"question":"“I have told you a million times” is an example of _____.","options":["hyperbole","simile","assonance","alliteration"]},{"question":"“The stars winked at us” uses _____.","options":["personification","onomatopoeia","rhyme","assonance"]},{"question":"The repetition of beginning consonant sounds is _____.","options":["alliteration","assonance","imagery","symbolism"]},{"question":"The repetition of vowel sounds is _____.","options":["assonance","alliteration","hyperbole","metaphor"]},{"question":"A word that imitates a sound is _____.","options":["onomatopoeia","symbolism","simile","personification"]},{"question":"Language that appeals to the senses creates _____.","options":["imagery","plot","conflict","point of view"]},{"question":"An object that represents a larger idea is a _____.","options":["symbol","stanza","line","rhyme scheme"]}]},{"week":7,"title":"Types and Purposes of Literary Text","overview":"Literary texts come in different forms. Readers can identify a text type and consider whether its main purpose is to persuade, inform, or entertain.","objectives":["Identify familiar literary text types.","Explain the purposes to persuade, inform, and entertain.","Classify texts using clues from their content and language.","Explain a selected author’s likely purpose."],"lessons":[{"heading":"Types of literary texts","body":"Common literary forms include fables, short stories, novels, poems, and plays. A fable is a brief story that often teaches a lesson and may use animal characters. A short story is a brief work of fiction. A novel is a longer work of fiction. A poem uses carefully arranged language. A play is written to be performed."},{"heading":"Three common purposes: PIE","body":"Persuade: the writer wants readers to agree with an idea or take action. Inform: the writer wants to explain or give information. Entertain: the writer wants to engage readers through an interesting experience, story, or performance."},{"heading":"Finding the purpose","body":"Look at the writer’s language and the text’s content. Reasons, opinions, and calls to action may signal persuasion. Facts and explanations may signal informing. A story, humor, suspense, or imaginative events may signal entertainment. Some texts have more than one purpose."},{"heading":"Author’s purpose","body":"Ask: What does the writer want the reader to think, know, feel, or do? Support your answer with clues from the text rather than relying only on the title."}],"practice":[{"q":"A text that gives facts and explanations mainly aims to _____.","choices":["inform","persuade","entertain","confuse"]},{"q":"A text that gives reasons to support an opinion aims to _____.","choices":["persuade","inform","entertain","describe only"]},{"q":"A fable commonly teaches a _____.","choices":["lesson","recipe","news report","instruction manual"]},{"q":"A text written to be performed by actors is a _____.","choices":["play","novel","dictionary","letter"]}],"task":"Choose one text you have read. Identify its text type and its main purpose (persuade, inform, or entertain). Give two clues from the text that support your answer.","quiz":[{"question":"Which is a common literary text type?","options":["Fable","Spreadsheet","Receipt","Map legend"]},{"question":"A long work of fiction is usually called a _____.","options":["novel","stanza","caption","riddle"]},{"question":"A play is mainly written to be _____.","options":["performed","measured","cooked","translated"]},{"question":"What does PIE stand for in this lesson?","options":["Persuade, Inform, Entertain","Plot, Image, Emotion","Poetry, Information, Essay","Person, Idea, Event"]},{"question":"A writer asks readers to support a community project and gives reasons. The purpose is to _____.","options":["persuade","inform","entertain","describe a setting"]},{"question":"A passage explains how rain forms using facts. Its purpose is to _____.","options":["inform","persuade","entertain","create suspense"]},{"question":"A humorous story mainly written to amuse readers aims to _____.","options":["entertain","inform","persuade","instruct"]},{"question":"How should readers identify author’s purpose?","options":["Use clues from the text’s content and language.","Guess from the cover only.","Choose the longest answer.","Ignore the details."]}]},{"week":8,"title":"Purpose and Features of Poetry","overview":"Poetry may be narrative, lyric, or dramatic. Poems also use structural elements such as speaker, character, plot, setting, conflict, rhyme, meter, diction, tone, mood, and figures of speech.","objectives":["Distinguish narrative, lyric, and dramatic poetry.","Identify structural and language features of poetry.","Analyze selected poem excerpts using evidence.","Compose a poem for a family member or another meaningful person."],"lessons":[{"heading":"Three types of poetry","body":"Narrative poetry tells a story and often includes characters and events. Lyric poetry expresses personal feelings or thoughts. Dramatic poetry presents a situation through a speaker or character, often in a dramatic voice."},{"heading":"Structural elements","body":"Some poems include characters, setting, plot, and conflict, especially narrative and dramatic poems. The speaker is the voice that communicates the poem. The speaker is not automatically the poet."},{"heading":"Language and sound","body":"Diction means word choice. Tone is the speaker’s or poet’s attitude toward the subject. Mood is the feeling created for the reader. Style is the distinctive way ideas are expressed. Rhyme and meter create sound patterns; figures of speech and imagery deepen meaning."},{"heading":"Patterns and motifs","body":"A pattern is a repeated arrangement, such as rhyme or rhythm. A motif is a recurring image, symbol, or idea that contributes to a poem’s meaning. Point of view and narrative techniques shape how a poem presents its subject."},{"heading":"Composing poetry","body":"Choose a subject and purpose. Decide what feeling or idea you want to express. Select words and images that support it. Arrange lines and stanzas intentionally. Read the poem aloud and revise words or sounds that do not fit your meaning."}],"practice":[{"q":"A poem that tells a sequence of events is ____ poetry.","choices":["narrative","lyric","dramatic","informative"]},{"q":"A poem that mainly expresses personal feelings is ____ poetry.","choices":["narrative","lyric","dramatic","expository"]},{"q":"The attitude expressed by the speaker is the _____.","choices":["tone","mood","setting","plot"]},{"q":"The feeling created in the reader is the _____.","choices":["mood","tone","diction","meter"]}],"task":"Compose an original 8–12-line poem for a family member or another person who is important to you. Choose a clear purpose and tone. Use at least one image or figure of speech. Add a short note identifying the type of poetry you attempted.","quiz":[{"question":"Which type of poetry tells a story?","options":["Narrative","Lyric","Dramatic","Free verse only"]},{"question":"Which type of poetry focuses on personal feelings?","options":["Lyric","Narrative","Dramatic","Epic only"]},{"question":"Which type presents a situation through a speaker or character?","options":["Dramatic","Lyric","Narrative","Informative"]},{"question":"What is diction?","options":["The poet’s choice of words","The reader’s mood","The poem’s setting","The number of characters"]},{"question":"Tone refers to the _____.","options":["speaker’s or poet’s attitude","reader’s emotional response","number of stanzas","story’s location"]},{"question":"Mood refers to the _____.","options":["feeling created for the reader","author’s biography","poem’s line count","rhyme pattern only"]},{"question":"A recurring image or idea in a poem may be a _____.","options":["motif","climax","resolution","antagonist"]},{"question":"Who is the speaker?","options":["The voice that communicates the poem","Always the poet in real life","The reader","The title"]}]},{"week":9,"title":"Revising Literary Texts for Coherence and Cohesion","overview":"This week develops the writing of an original short story through story mapping, plot sequencing, drafting, and improving coherence and cohesion. The lesson plan uses “We Filipinos Are Mild Drinkers” by Alejandro R. Roces as a reference text.","objectives":["Identify the stages of the writing process.","Use story elements to plan a short story.","Arrange events in a timeline.","Develop a coherent draft from planned events."],"lessons":[{"heading":"The writing process","body":"Prewriting: choose a topic, purpose, audience, and ideas. Drafting: turn ideas into sentences and paragraphs. Revising: improve ideas, organization, details, and clarity. Editing: correct grammar, spelling, capitalization, and punctuation. Publishing: prepare and share the final work."},{"heading":"Plan before drafting","body":"A story plan identifies the characters, setting, conflict, important events, climax, and resolution. Planning helps writers avoid events that feel disconnected."},{"heading":"Constructing a timeline","body":"A timeline places story events in chronological order. Begin with the situation, add events that develop the problem, identify the turning point, and finish with the outcome. Use transition words such as first, next, later, after that, and finally."},{"heading":"From timeline to paragraphs","body":"Turn each major timeline event into a scene or paragraph. Include actions, dialogue, and relevant details. Make sure each event connects logically to the next and contributes to the main conflict."}],"practice":[{"q":"Improving ideas and organization is called _____.","choices":["revising","editing","publishing","copying"]},{"q":"Correcting spelling and punctuation is called _____.","choices":["editing","prewriting","drafting","brainstorming"]},{"q":"A timeline arranges events in ____ order.","choices":["chronological","alphabetical","random","dictionary"]},{"q":"The most intense turning point is the _____.","choices":["climax","setting","exposition","theme"]}],"task":"Plan an original short story using a timeline with at least six events. Label the exposition, rising action, climax, falling action, and resolution. Then draft the story using your timeline.","quiz":[{"question":"Which stage comes first in the writing process?","options":["Prewriting","Editing","Publishing","Revising"]},{"question":"When does a writer produce the first version?","options":["Drafting","Publishing","Editing","Proofreading"]},{"question":"Which stage improves ideas and organization?","options":["Revising","Editing","Publishing","Printing"]},{"question":"Which stage corrects grammar, spelling, and punctuation?","options":["Editing","Prewriting","Drafting","Brainstorming"]},{"question":"What does a timeline help a writer do?","options":["Arrange events in sequence","Choose font size only","Count characters’ names","Replace the story’s conflict"]},{"question":"Which transition word signals the final event?","options":["Finally","Meanwhile","Earlier","Before"]},{"question":"What is the climax?","options":["The turning point or most intense moment","The list of characters","The opening description only","The title"]},{"question":"Why should events connect logically?","options":["To make the story coherent and easy to follow","To make the story longer at any cost","To remove the resolution","To avoid having characters"]}]},{"week":10,"title":"Publishing an Original Literary Text","overview":"Publishing is the final stage of the writing process. Writers prepare a polished version, check that it meets its purpose and audience needs, and choose an appropriate way to share it.","objectives":["Review the stages of the writing process.","Revise and edit a completed literary text.","Apply a checklist or rubric to improve a draft.","Publish and present an original literary text."],"lessons":[{"heading":"What publishing means","body":"Publishing means preparing a final version of a text and making it available to readers. It may be shared as a printed page, class booklet, reading presentation, or digital document."},{"heading":"Before publishing","body":"Check that the text has a clear purpose, understandable organization, developed characters or ideas, connected events, and an appropriate ending. Review grammar, spelling, capitalization, and punctuation."},{"heading":"Peer feedback","body":"Useful feedback is specific, respectful, and focused on the writing. A reader can identify a strong part, ask a question, and suggest one improvement. The writer decides how to use feedback to strengthen the text."},{"heading":"Final presentation","body":"Prepare a clean copy with a suitable title and readable layout. If presenting orally, speak clearly and introduce the purpose or main idea of the work. Give credit for any sources or borrowed material used."}],"practice":[{"q":"The final stage of the writing process is _____.","choices":["publishing","prewriting","drafting","brainstorming"]},{"q":"Which is the most useful peer feedback?","choices":["Your ending is clear; consider adding one detail to explain the character’s choice.","This is bad.","I do not like stories.","Make it longer without explaining why."]},{"q":"A final copy should be _____.","choices":["clear, readable, and carefully checked","left with spelling errors","missing a title","copied without review"]}],"task":"Publish your original literary text from Week 9. Submit a polished copy with a title. Include a short writer’s note explaining your purpose, intended audience, and one revision you made after feedback.","quiz":[{"question":"What does publishing mean?","options":["Preparing and sharing the final version of a text","Writing the first rough idea","Choosing a topic only","Correcting one spelling error only"]},{"question":"Which should be checked before publishing?","options":["Organization, clarity, grammar, spelling, and punctuation","Only the color of the paper","Only the number of pages","Only the writer’s handwriting"]},{"question":"What makes peer feedback useful?","options":["It is specific, respectful, and gives a possible improvement.","It insults the writer.","It gives no reason.","It changes the topic completely."]},{"question":"Which is a suitable way to publish a student story?","options":["A class booklet or digital document","A private unfinished draft only","An unlabelled page","A random list of sentences"]},{"question":"Why is a title important?","options":["It gives readers an idea of the text’s subject or focus.","It replaces the story.","It tells the entire ending.","It removes the need for paragraphs."]},{"question":"What should a writer do with feedback?","options":["Consider it and revise where it improves the work.","Accept every suggestion without thinking.","Ignore all comments automatically.","Delete the entire story."]},{"question":"What should a writer do when using borrowed material?","options":["Give appropriate credit to its source.","Claim it as entirely original.","Remove the source name.","Copy it without acknowledgment."]}]}];
 
   const loginSection = document.getElementById("loginSection");
   const resetSection = document.getElementById("resetSection");
   const dashboardSection = document.getElementById("dashboardSection");
+  let currentGradeLevel = "";
 
   function showSection(section) {
     loginSection.classList.add("hidden");
@@ -441,11 +174,11 @@
     section.classList.remove("hidden");
   }
 
-  // TERM AND WEEK NAVIGATION
   const studentHome = document.getElementById("studentHome");
   const weeksView = document.getElementById("weeksView");
   const weekDetailView = document.getElementById("weekDetailView");
   const weekContainer = document.getElementById("weekContainer");
+  const lessonContent = document.getElementById("lessonContent");
 
   function showStudentHome() {
     studentHome.classList.remove("hidden");
@@ -453,47 +186,107 @@
     weekDetailView.classList.add("hidden");
   }
 
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[character]);
+  }
+
   function openTerm(termNumber) {
     document.getElementById("weeksTitle").textContent = "TERM " + termNumber;
     weekContainer.innerHTML = "";
 
     for (let week = 1; week <= 10; week++) {
+      const lesson = currentGradeLevel === "Grade 7" && Number(termNumber) === 1
+        ? GRADE7_TERM1.find(item => item.week === week)
+        : null;
+
       const button = document.createElement("button");
       button.type = "button";
       button.className = "week-card";
-      button.innerHTML =
-        "<strong>WEEK " + week + "</strong><span>Open weekly learning page</span>";
+      const title = lesson ? lesson.title : "Weekly learning page";
+      button.innerHTML = "<strong>WEEK " + week + "</strong><span>" +
+        escapeHTML(title) + "</span>";
       button.addEventListener("click", () => openWeek(termNumber, week));
       weekContainer.appendChild(button);
     }
+
+    document.getElementById("weeksDescription").textContent =
+      currentGradeLevel === "Grade 7" && Number(termNumber) === 1
+        ? "Grade 7 · Term 1 — Select one of the 10 weekly lessons."
+        : currentGradeLevel + " · Term " + termNumber +
+          " materials have not been added yet. Grade 7 Term 1 is currently available.";
 
     studentHome.classList.add("hidden");
     weekDetailView.classList.add("hidden");
     weeksView.classList.remove("hidden");
   }
 
+  function renderLesson(lesson) {
+    const objectives = lesson.objectives.map(item => "<li>" + escapeHTML(item) + "</li>").join("");
+    const discussions = lesson.lessons.map(item =>
+      '<section class="lesson-section"><h3>' + escapeHTML(item.heading) +
+      '</h3><p>' + escapeHTML(item.body) + '</p></section>'
+    ).join("");
+
+    const practice = lesson.practice.map((item, index) => {
+      const choices = item.choices && item.choices.length
+        ? '<ol class="choice-list" type="A">' + item.choices.map(choice => '<li>' + escapeHTML(choice) + '</li>').join("") + '</ol>'
+        : "";
+      return '<div class="question-card"><p>' + (index + 1) + '. ' + escapeHTML(item.q) + '</p>' + choices + '</div>';
+    }).join("");
+
+    const quiz = lesson.quiz.map((item, index) =>
+      '<div class="question-card"><p>' + (index + 1) + '. ' + escapeHTML(item.question) +
+      '</p><ol class="choice-list" type="A">' +
+      item.options.map(option => '<li>' + escapeHTML(option) + '</li>').join("") +
+      '</ol></div>'
+    ).join("");
+
+    lessonContent.innerHTML =
+      '<div class="lesson-banner"><p><strong>WEEK ' + lesson.week + ' · GRADE 7 · TERM 1</strong></p>' +
+      '<h2>' + escapeHTML(lesson.title) + '</h2><p>' + escapeHTML(lesson.overview) + '</p></div>' +
+      '<section class="lesson-section"><h3>Learning Objectives</h3><ul class="objective-list">' + objectives + '</ul></section>' +
+      '<h2>Lesson Discussion</h2>' + discussions +
+      '<section class="lesson-section"><h3>Practice Activities</h3><p>Answer these in your notebook. Use the lesson discussion as your guide.</p>' + practice + '</section>' +
+      '<section class="task-box"><h3>Weekly Learning Task</h3><p>' + escapeHTML(lesson.task) + '</p></section>' +
+      '<section class="lesson-section"><h3>Weekly Knowledge Check</h3><p>Write your answers in your notebook. Your teacher will check your responses.</p>' + quiz +
+      '<p class="note">These questions are for classroom assessment and are not automatically submitted or graded by the portal.</p></section>' +
+      '<p class="note">Reading reminder: Use the complete literary text or poem provided by your teacher. The portal provides lesson guidance and does not reproduce complete copyrighted works.</p>';
+  }
+
   function openWeek(termNumber, weekNumber) {
     document.getElementById("weekDetailTitle").textContent =
       "TERM " + termNumber + " — WEEK " + weekNumber;
 
+    if (currentGradeLevel === "Grade 7" && Number(termNumber) === 1) {
+      const lesson = GRADE7_TERM1.find(item => item.week === weekNumber);
+      if (lesson) {
+        renderLesson(lesson);
+      } else {
+        lessonContent.innerHTML = "<p>Learning materials for this week are not available yet.</p>";
+      }
+    } else {
+      lessonContent.innerHTML =
+        '<div class="lesson-banner"><h3>Learning Materials Coming Soon</h3>' +
+        '<p>Materials for ' + escapeHTML(currentGradeLevel) + ', Term ' +
+        escapeHTML(termNumber) + ', Week ' + escapeHTML(weekNumber) +
+        ' have not been added yet.</p></div>';
+    }
+
     weeksView.classList.add("hidden");
     weekDetailView.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  document.querySelectorAll(".term-card").forEach((card) => {
-    card.addEventListener("click", () => {
-      openTerm(card.dataset.term);
-    });
+  document.querySelectorAll(".term-card").forEach(card => {
+    card.addEventListener("click", () => openTerm(card.dataset.term));
   });
-
-  document.getElementById("backToTermsButton")
-    .addEventListener("click", showStudentHome);
-
-  document.getElementById("backToWeeksButton")
-    .addEventListener("click", () => {
-      weekDetailView.classList.add("hidden");
-      weeksView.classList.remove("hidden");
-    });
+  document.getElementById("backToTermsButton").addEventListener("click", showStudentHome);
+  document.getElementById("backToWeeksButton").addEventListener("click", () => {
+    weekDetailView.classList.add("hidden");
+    weeksView.classList.remove("hidden");
+  });
 
   // PASSWORD RECOVERY
   supabaseClient.auth.onAuthStateChange((event) => {
@@ -504,7 +297,6 @@
     const hash = window.location.hash;
     if (hash.includes("type=recovery")) {
       const { data, error } = await supabaseClient.auth.getSession();
-
       if (error || !data.session) {
         showSection(loginSection);
         document.getElementById("message").textContent =
@@ -516,72 +308,55 @@
   }
   checkRecoverySession();
 
-  // REQUEST PASSWORD RESET
   document.getElementById("forgotButton").addEventListener("click", async () => {
     const email = document.getElementById("username").value.trim().toLowerCase();
-
     if (!email.includes("@")) {
       document.getElementById("message").textContent =
         "Please enter your administrator email address first.";
       return;
     }
-
     document.getElementById("message").textContent = "Sending recovery email...";
     const redirectUrl = window.location.origin + window.location.pathname;
-
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-      redirectTo: redirectUrl
-    });
-
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: redirectUrl });
     document.getElementById("message").textContent = error
-      ? error.message
-      : "Recovery email requested. Check your inbox.";
+      ? error.message : "Recovery email requested. Check your inbox.";
   });
 
-  // SAVE NEW PASSWORD
   document.getElementById("resetForm").addEventListener("submit", async (event) => {
     event.preventDefault();
-
     const newPassword = document.getElementById("newPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
     const button = document.getElementById("savePasswordButton");
     const status = document.getElementById("resetMessage");
-
     if (newPassword !== confirmPassword) {
       status.textContent = "The passwords do not match.";
       return;
     }
-
     button.disabled = true;
     button.textContent = "Saving...";
-
     const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
-
     if (error) {
       status.textContent = error.message;
     } else {
       status.textContent = "Password updated successfully. You can now sign in.";
       await supabaseClient.auth.signOut();
       document.getElementById("resetForm").reset();
-
       setTimeout(() => {
         window.history.replaceState({}, document.title, window.location.pathname);
         showSection(loginSection);
       }, 2000);
     }
-
     button.disabled = false;
     button.textContent = "Save New Password";
   });
 
-  // SHOW THE CORRECT DASHBOARD
   async function showUserDashboard(user) {
     const actualEmail = (user.email || "").toLowerCase();
-
     document.getElementById("adminPanel").classList.add("hidden");
     document.getElementById("studentPanel").classList.add("hidden");
 
     if (actualEmail === ADMIN_EMAIL) {
+      currentGradeLevel = "";
       document.getElementById("welcomeTitle").textContent = "Welcome, Administrator!";
       document.getElementById("accountDetails").textContent = "Administrator account";
       document.getElementById("adminPanel").classList.remove("hidden");
@@ -603,39 +378,29 @@
       return;
     }
 
-    document.getElementById("welcomeTitle").textContent =
-      "Welcome, " + profile.display_name + "!";
+    currentGradeLevel = profile.grade_level;
+    document.getElementById("welcomeTitle").textContent = "Welcome, " + profile.display_name + "!";
     document.getElementById("accountDetails").textContent =
       "Username: " + profile.username + " | " + profile.grade_level;
-
     showStudentHome();
     document.getElementById("studentPanel").classList.remove("hidden");
     showSection(dashboardSection);
   }
 
-  // LOGIN
   document.getElementById("loginForm").addEventListener("submit", async (event) => {
     event.preventDefault();
-
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
     const button = document.getElementById("loginButton");
     const message = document.getElementById("message");
-
     button.disabled = true;
     button.textContent = "Signing in...";
     message.textContent = "";
-
     try {
       const loginEmail = username.includes("@")
         ? username.toLowerCase()
-        : `${username.toLowerCase()}@students.english-class.invalid`;
-
-      const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: loginEmail,
-        password
-      });
-
+        : username.toLowerCase() + "@students.english-class.invalid";
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email: loginEmail, password });
       if (error) throw error;
       await showUserDashboard(data.user);
     } catch (error) {
@@ -646,30 +411,21 @@
     }
   });
 
-  // CREATE STUDENT ACCOUNT
   document.getElementById("createStudentForm").addEventListener("submit", async (event) => {
     event.preventDefault();
-
     const button = document.getElementById("createStudentButton");
     const status = document.getElementById("createStudentMessage");
-
     const studentData = {
       username: document.getElementById("studentUsername").value.trim().toLowerCase(),
       display_name: document.getElementById("studentName").value.trim(),
       grade_level: document.getElementById("studentGrade").value,
       password: document.getElementById("studentPassword").value
     };
-
     button.disabled = true;
     button.textContent = "Creating account...";
     status.textContent = "";
-
     try {
-      const { data, error } = await supabaseClient.functions.invoke(
-        "create-student-account",
-        { body: studentData }
-      );
-
+      const { data, error } = await supabaseClient.functions.invoke("create-student-account", { body: studentData });
       if (error) {
         let detail = error.message;
         if (error.context && typeof error.context.json === "function") {
@@ -680,13 +436,8 @@
         }
         throw new Error(detail);
       }
-
-      if (!data || !data.success) {
-        throw new Error(data?.error || "Account creation failed.");
-      }
-
-      status.textContent =
-        "Student account created successfully! Username: " + data.student.username;
+      if (!data || !data.success) throw new Error(data?.error || "Account creation failed.");
+      status.textContent = "Student account created successfully! Username: " + data.student.username;
       document.getElementById("createStudentForm").reset();
     } catch (error) {
       status.textContent = error.message || "Unable to create student account.";
@@ -696,7 +447,6 @@
     }
   });
 
-  // SIGN OUT
   document.getElementById("logoutButton").addEventListener("click", async () => {
     await supabaseClient.auth.signOut();
     document.getElementById("loginForm").reset();
