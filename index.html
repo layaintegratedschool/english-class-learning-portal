@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173b32">
   <title>English Class Learning Portal</title>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -25,7 +24,7 @@
 
     .login-card {
       width: 100%;
-      max-width: 420px;
+      max-width: 520px;
       padding: 32px;
       background: white;
       border-radius: 18px;
@@ -40,12 +39,7 @@
       text-transform: uppercase;
     }
 
-    h1 {
-      margin: 10px 0;
-      color: #173b32;
-      font-size: 27px;
-    }
-
+    h1 { margin: 10px 0; color: #173b32; font-size: 27px; }
     h2 { color: #173b32; }
 
     .subtitle {
@@ -62,17 +56,13 @@
       font-weight: bold;
     }
 
-    input {
+    input, select {
       width: 100%;
       padding: 13px;
       border: 1px solid #dce2dc;
       border-radius: 10px;
       font-size: 15px;
-    }
-
-    input:focus {
-      outline: 2px solid #245748;
-      border-color: transparent;
+      background: white;
     }
 
     button {
@@ -88,14 +78,8 @@
       cursor: pointer;
     }
 
-    button:disabled {
-      opacity: .6;
-      cursor: wait;
-    }
-
-    .secondary-button {
-      background: #68736c;
-    }
+    button:disabled { opacity: .6; cursor: wait; }
+    .secondary-button { background: #68736c; }
 
     .text-button {
       background: transparent;
@@ -104,11 +88,16 @@
       padding: 8px;
     }
 
-    #message, #resetMessage {
+    .section-divider {
+      border: 0;
+      border-top: 1px solid #e3e8e3;
+      margin: 25px 0;
+    }
+
+    .status {
       min-height: 22px;
-      margin-top: 15px;
+      margin-top: 12px;
       font-size: 13px;
-      text-align: center;
       line-height: 1.5;
     }
 
@@ -119,331 +108,409 @@
       text-align: center;
     }
 
-    .dashboard, #resetSection {
-      display: none;
-    }
+    .hidden { display: none !important; }
   </style>
 </head>
 
 <body>
-  <main class="login-card">
+<main class="login-card">
 
-    <!-- LOGIN PAGE -->
-    <section id="loginSection">
-      <div class="school-name">Laya Integrated School</div>
-      <h1>English Class Portal</h1>
+  <section id="loginSection">
+    <div class="school-name">Laya Integrated School</div>
+    <h1>English Class Portal</h1>
+    <p class="subtitle">
+      Welcome! Sign in to access your English learning materials
+      and classroom resources.
+    </p>
 
-      <p class="subtitle">
-        Welcome! Sign in to access your English learning materials
-        and classroom resources.
-      </p>
+    <form id="loginForm">
+      <label for="username">Username or Email</label>
+      <input id="username" type="text"
+        placeholder="Enter your username or email"
+        autocomplete="username" required>
 
-      <form id="loginForm">
-        <label for="username">Username or Email</label>
-        <input id="username" type="text"
-          placeholder="Enter your username or email"
-          autocomplete="username" required>
+      <label for="password">Password</label>
+      <input id="password" type="password"
+        placeholder="Enter your password"
+        autocomplete="current-password" required>
 
-        <label for="password">Password</label>
-        <input id="password" type="password"
-          placeholder="Enter your password"
-          autocomplete="current-password" required>
-
-        <button id="loginButton" type="submit">Sign In</button>
-
-        <button class="text-button" id="forgotButton" type="button">
-          Forgot Password?
-        </button>
-
-        <div id="message" role="status" aria-live="polite"></div>
-      </form>
-    </section>
-
-    <!-- PASSWORD RESET PAGE -->
-    <section id="resetSection">
-      <div class="school-name">Laya Integrated School</div>
-      <h1>Reset Password</h1>
-
-      <p class="subtitle">
-        Enter your new password below.
-      </p>
-
-      <form id="resetForm">
-        <label for="newPassword">New Password</label>
-        <input id="newPassword" type="password"
-          placeholder="Enter new password"
-          minlength="8" autocomplete="new-password" required>
-
-        <label for="confirmPassword">Confirm New Password</label>
-        <input id="confirmPassword" type="password"
-          placeholder="Confirm new password"
-          minlength="8" autocomplete="new-password" required>
-
-        <button id="savePasswordButton" type="submit">
-          Save New Password
-        </button>
-
-        <div id="resetMessage" role="status" aria-live="polite"></div>
-      </form>
-    </section>
-
-    <!-- DASHBOARD -->
-    <section id="dashboardSection" class="dashboard">
-      <div class="school-name">Laya Integrated School</div>
-      <h2 id="welcomeTitle">Welcome!</h2>
-      <p id="accountDetails"></p>
-
-      <p>
-        Your account has been successfully authenticated.
-        Your learning dashboard will be available here.
-      </p>
-
-      <button id="logoutButton" class="secondary-button" type="button">
-        Sign Out
+      <button id="loginButton" type="submit">Sign In</button>
+      <button class="text-button" id="forgotButton" type="button">
+        Forgot Password?
       </button>
-    </section>
+      <div id="message" class="status" role="status"></div>
+    </form>
+  </section>
 
-    <div class="footer">
-      English Learning Portal · Grades 7–10
+  <section id="resetSection" class="hidden">
+    <div class="school-name">Laya Integrated School</div>
+    <h1>Reset Password</h1>
+    <p class="subtitle">Enter your new password below.</p>
+
+    <form id="resetForm">
+      <label for="newPassword">New Password</label>
+      <input id="newPassword" type="password"
+        minlength="8" autocomplete="new-password" required>
+
+      <label for="confirmPassword">Confirm New Password</label>
+      <input id="confirmPassword" type="password"
+        minlength="8" autocomplete="new-password" required>
+
+      <button id="savePasswordButton" type="submit">
+        Save New Password
+      </button>
+      <div id="resetMessage" class="status" role="status"></div>
+    </form>
+  </section>
+
+  <section id="dashboardSection" class="hidden">
+    <div class="school-name">Laya Integrated School</div>
+    <h2 id="welcomeTitle">Welcome!</h2>
+    <p id="accountDetails"></p>
+
+    <!-- ADMINISTRATOR PANEL -->
+    <div id="adminPanel" class="hidden">
+      <hr class="section-divider">
+      <h2>Student Account Management</h2>
+      <p class="subtitle">
+        Create student accounts for Grades 7–10.
+      </p>
+
+      <form id="createStudentForm">
+        <label for="studentUsername">Student Username</label>
+        <input id="studentUsername" type="text"
+          placeholder="Example: student_001"
+          minlength="4" maxlength="24"
+          pattern="[a-zA-Z0-9_]{4,24}" required>
+
+        <label for="studentName">Student Display Name</label>
+        <input id="studentName" type="text"
+          placeholder="Enter student's display name"
+          maxlength="80" required>
+
+        <label for="studentGrade">Grade Level</label>
+        <select id="studentGrade" required>
+          <option value="">Select grade level</option>
+          <option value="Grade 7">Grade 7</option>
+          <option value="Grade 8">Grade 8</option>
+          <option value="Grade 9">Grade 9</option>
+          <option value="Grade 10">Grade 10</option>
+        </select>
+
+        <label for="studentPassword">Initial Password</label>
+        <input id="studentPassword" type="password"
+          placeholder="At least 8 characters"
+          minlength="8" maxlength="72"
+          autocomplete="new-password" required>
+
+        <button id="createStudentButton" type="submit">
+          Create Student Account
+        </button>
+
+        <div id="createStudentMessage" class="status"
+          role="status" aria-live="polite"></div>
+      </form>
     </div>
-  </main>
 
-  <script>
-    // SUPABASE CONNECTION
-    const SUPABASE_URL =
-      "https://njozhfubaagfusenxlxe.supabase.co";
+    <!-- STUDENT PANEL -->
+    <div id="studentPanel" class="hidden">
+      <hr class="section-divider">
+      <h2>My Learning Dashboard</h2>
+      <p>
+        Welcome to your English learning space.
+        Your grade-level learning materials will appear here.
+      </p>
+    </div>
 
-    // KEEP YOUR EXISTING PUBLISHABLE KEY HERE
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_g5yQydfOR_iHCtZOvLHWTA_WQ9_Akng";
+    <button id="logoutButton" class="secondary-button" type="button">
+      Sign Out
+    </button>
+  </section>
 
-    // KEEP YOUR EXISTING ADMINISTRATOR EMAIL HERE
-    const ADMIN_EMAIL =
-      "layaintegratedschool@gmail.com".trim().toLowerCase();
+  <div class="footer">
+    English Learning Portal · Grades 7–10
+  </div>
+</main>
 
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
-    );
+<script>
+  // SUPABASE CONNECTION
+  const SUPABASE_URL =
+    "https://njozhfubaagfusenxlxe.supabase.co";
 
-    const loginSection = document.getElementById("loginSection");
-    const resetSection = document.getElementById("resetSection");
-    const dashboardSection = document.getElementById("dashboardSection");
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_g5yQydfOR_iHCtZOvLHWTA_WQ9_Akng";
 
-    const message = document.getElementById("message");
-    const resetMessage = document.getElementById("resetMessage");
+  const ADMIN_EMAIL =
+    "layaintegratedschool@gmail.com".trim().toLowerCase();
 
-    function showSection(section) {
-      loginSection.style.display = "none";
-      resetSection.style.display = "none";
-      dashboardSection.style.display = "none";
-      section.style.display = "block";
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  const loginSection = document.getElementById("loginSection");
+  const resetSection = document.getElementById("resetSection");
+  const dashboardSection = document.getElementById("dashboardSection");
+
+  function showSection(section) {
+    loginSection.classList.add("hidden");
+    resetSection.classList.add("hidden");
+    dashboardSection.classList.add("hidden");
+    section.classList.remove("hidden");
+  }
+
+  // PASSWORD RECOVERY
+  supabaseClient.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY") {
+      showSection(resetSection);
+    }
+  });
+
+  async function checkRecoverySession() {
+    const hash = window.location.hash;
+
+    if (hash.includes("type=recovery")) {
+      const { data, error } = await supabaseClient.auth.getSession();
+
+      if (error || !data.session) {
+        showSection(loginSection);
+        document.getElementById("message").textContent =
+          "This recovery link may have expired. Please request a new one.";
+      } else {
+        showSection(resetSection);
+      }
+    }
+  }
+
+  checkRecoverySession();
+
+  // REQUEST PASSWORD RESET
+  document.getElementById("forgotButton")
+    .addEventListener("click", async () => {
+      const email = document.getElementById("username")
+        .value.trim().toLowerCase();
+
+      if (!email.includes("@")) {
+        document.getElementById("message").textContent =
+          "Please enter your administrator email address first.";
+        return;
+      }
+
+      document.getElementById("message").textContent =
+        "Sending recovery email...";
+
+      const redirectUrl =
+        window.location.origin + window.location.pathname;
+
+      const { error } =
+        await supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: redirectUrl
+        });
+
+      document.getElementById("message").textContent = error
+        ? error.message
+        : "Recovery email requested. Check your inbox.";
+    });
+
+  // SAVE NEW PASSWORD
+  document.getElementById("resetForm")
+    .addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const newPassword =
+        document.getElementById("newPassword").value;
+      const confirmPassword =
+        document.getElementById("confirmPassword").value;
+      const button =
+        document.getElementById("savePasswordButton");
+      const status =
+        document.getElementById("resetMessage");
+
+      if (newPassword !== confirmPassword) {
+        status.textContent = "The passwords do not match.";
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Saving...";
+
+      const { error } = await supabaseClient.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) {
+        status.textContent = error.message;
+      } else {
+        status.textContent =
+          "Password updated successfully. You can now sign in.";
+
+        await supabaseClient.auth.signOut();
+        document.getElementById("resetForm").reset();
+
+        setTimeout(() => {
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+          );
+          showSection(loginSection);
+        }, 2000);
+      }
+
+      button.disabled = false;
+      button.textContent = "Save New Password";
+    });
+
+  // SHOW THE CORRECT DASHBOARD
+  async function showUserDashboard(user) {
+    const actualEmail = (user.email || "").toLowerCase();
+
+    document.getElementById("adminPanel").classList.add("hidden");
+    document.getElementById("studentPanel").classList.add("hidden");
+
+    if (actualEmail === ADMIN_EMAIL) {
+      document.getElementById("welcomeTitle").textContent =
+        "Welcome, Administrator!";
+      document.getElementById("accountDetails").textContent =
+        "Administrator account";
+      document.getElementById("adminPanel").classList.remove("hidden");
+      showSection(dashboardSection);
+      return;
     }
 
-    // CHECK FOR PASSWORD RECOVERY SESSION
-    supabaseClient.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY") {
-        showSection(resetSection);
+    const { data: profile, error } = await supabaseClient
+      .from("student_profiles")
+      .select("username, display_name, grade_level")
+      .eq("id", user.id)
+      .single();
+
+    if (error || !profile) {
+      await supabaseClient.auth.signOut();
+      showSection(loginSection);
+      document.getElementById("message").textContent =
+        "No student profile was found. Please contact your administrator.";
+      return;
+    }
+
+    document.getElementById("welcomeTitle").textContent =
+      "Welcome, " + profile.display_name + "!";
+    document.getElementById("accountDetails").textContent =
+      "Username: " + profile.username + " | " + profile.grade_level;
+
+    document.getElementById("studentPanel").classList.remove("hidden");
+    showSection(dashboardSection);
+  }
+
+  // LOGIN
+  document.getElementById("loginForm")
+    .addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const username =
+        document.getElementById("username").value.trim();
+      const password =
+        document.getElementById("password").value;
+      const button = document.getElementById("loginButton");
+      const message = document.getElementById("message");
+
+      button.disabled = true;
+      button.textContent = "Signing in...";
+      message.textContent = "";
+
+      try {
+        const loginEmail = username.includes("@")
+          ? username.toLowerCase()
+          : `${username.toLowerCase()}@students.english-class.invalid`;
+
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+            email: loginEmail,
+            password
+          });
+
+        if (error) throw error;
+
+        await showUserDashboard(data.user);
+
+      } catch (error) {
+        message.textContent = error.message || "Unable to sign in.";
+      } finally {
+        button.disabled = false;
+        button.textContent = "Sign In";
       }
     });
 
-    // ALSO CHECK THE RECOVERY LINK WHEN THE PAGE LOADS
-    async function checkRecoverySession() {
-      const hash = window.location.hash;
+  // CREATE STUDENT ACCOUNT
+  document.getElementById("createStudentForm")
+    .addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-      if (hash.includes("type=recovery")) {
-        const { data, error } = await supabaseClient.auth.getSession();
+      const button =
+        document.getElementById("createStudentButton");
+      const status =
+        document.getElementById("createStudentMessage");
 
-        if (error || !data.session) {
-          showSection(loginSection);
-          message.textContent =
-            "This recovery link may have expired. Please request a new one.";
-        } else {
-          showSection(resetSection);
-        }
-      }
-    }
+      const studentData = {
+        username: document.getElementById("studentUsername")
+          .value.trim().toLowerCase(),
+        display_name: document.getElementById("studentName")
+          .value.trim(),
+        grade_level: document.getElementById("studentGrade").value,
+        password: document.getElementById("studentPassword").value
+      };
 
-    checkRecoverySession();
+      button.disabled = true;
+      button.textContent = "Creating account...";
+      status.textContent = "";
 
-    // REQUEST PASSWORD RECOVERY EMAIL
-    document.getElementById("forgotButton")
-      .addEventListener("click", async () => {
-
-        const email = document.getElementById("username")
-          .value.trim().toLowerCase();
-
-        if (!email.includes("@")) {
-          message.textContent =
-            "Please enter your administrator email address first.";
-          return;
-        }
-
-        message.textContent = "Sending recovery email...";
-
-        const redirectUrl =
-          window.location.origin + window.location.pathname;
-
-        const { error } =
-          await supabaseClient.auth.resetPasswordForEmail(email, {
-            redirectTo: redirectUrl
-          });
+      try {
+        const { data, error } =
+          await supabaseClient.functions.invoke(
+            "create-student-account",
+            { body: studentData }
+          );
 
         if (error) {
-          message.textContent = error.message;
-        } else {
-          message.textContent =
-            "Recovery email requested. Check your inbox.";
-        }
-      });
+          let detail = error.message;
 
-    // SAVE NEW PASSWORD
-    document.getElementById("resetForm")
-      .addEventListener("submit", async (event) => {
+          if (error.context && typeof error.context.json === "function") {
+            try {
+              const responseBody = await error.context.json();
+              detail = responseBody.error || detail;
+            } catch (_) {}
+          }
 
-        event.preventDefault();
-
-        const newPassword =
-          document.getElementById("newPassword").value;
-
-        const confirmPassword =
-          document.getElementById("confirmPassword").value;
-
-        if (newPassword.length < 8) {
-          resetMessage.textContent =
-            "Password must be at least 8 characters.";
-          return;
+          throw new Error(detail);
         }
 
-        if (newPassword !== confirmPassword) {
-          resetMessage.textContent =
-            "The passwords do not match.";
-          return;
+        if (!data || !data.success) {
+          throw new Error(data?.error || "Account creation failed.");
         }
 
-        const button =
-          document.getElementById("savePasswordButton");
+        status.textContent =
+          "Student account created successfully! Username: " +
+          data.student.username;
 
-        button.disabled = true;
-        button.textContent = "Saving...";
+        document.getElementById("createStudentForm").reset();
 
-        const { error } = await supabaseClient.auth.updateUser({
-          password: newPassword
-        });
-
-        if (error) {
-          resetMessage.textContent = error.message;
-        } else {
-          resetMessage.textContent =
-            "Password updated successfully. You can now sign in.";
-
-          await supabaseClient.auth.signOut();
-
-          document.getElementById("resetForm").reset();
-
-          setTimeout(() => {
-            window.history.replaceState(
-              {},
-              document.title,
-              window.location.pathname
-            );
-            showSection(loginSection);
-          }, 2000);
-        }
-
+      } catch (error) {
+        status.textContent =
+          error.message || "Unable to create student account.";
+      } finally {
         button.disabled = false;
-        button.textContent = "Save New Password";
-      });
+        button.textContent = "Create Student Account";
+      }
+    });
 
-    // NORMAL LOGIN
-    document.getElementById("loginForm")
-      .addEventListener("submit", async (event) => {
-
-        event.preventDefault();
-
-        const username =
-          document.getElementById("username").value.trim();
-
-        const password =
-          document.getElementById("password").value;
-
-        const button = document.getElementById("loginButton");
-
-        button.disabled = true;
-        button.textContent = "Signing in...";
-        message.textContent = "";
-
-        try {
-          const loginEmail = username.includes("@")
-            ? username.toLowerCase()
-            : `${username.toLowerCase()}@students.english-class.invalid`;
-
-          const { data, error } =
-            await supabaseClient.auth.signInWithPassword({
-              email: loginEmail,
-              password: password
-            });
-
-          if (error) throw error;
-
-          const user = data.user;
-          const actualEmail = (user.email || "").toLowerCase();
-
-          if (actualEmail === ADMIN_EMAIL) {
-            showSection(dashboardSection);
-
-            document.getElementById("welcomeTitle").textContent =
-              "Welcome, Administrator!";
-
-            document.getElementById("accountDetails").textContent =
-              "Administrator account";
-
-            return;
-          }
-
-          const { data: profile, error: profileError } =
-            await supabaseClient
-              .from("student_profiles")
-              .select("username, display_name, grade_level")
-              .eq("id", user.id)
-              .single();
-
-          if (profileError || !profile) {
-            await supabaseClient.auth.signOut();
-            throw new Error(
-              "No student profile was found. Please contact your administrator."
-            );
-          }
-
-          showSection(dashboardSection);
-
-          document.getElementById("welcomeTitle").textContent =
-            "Welcome, " + profile.display_name + "!";
-
-          document.getElementById("accountDetails").textContent =
-            "Username: " + profile.username +
-            " | " + profile.grade_level;
-
-        } catch (error) {
-          message.textContent =
-            error.message || "Unable to sign in.";
-        } finally {
-          button.disabled = false;
-          button.textContent = "Sign In";
-        }
-      });
-
-    // SIGN OUT
-    document.getElementById("logoutButton")
-      .addEventListener("click", async () => {
-
-        await supabaseClient.auth.signOut();
-
-        showSection(loginSection);
-
-        document.getElementById("loginForm").reset();
-        message.textContent = "";
-      });
-  </script>
+  // SIGN OUT
+  document.getElementById("logoutButton")
+    .addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      document.getElementById("loginForm").reset();
+      document.getElementById("createStudentMessage").textContent = "";
+      document.getElementById("message").textContent = "";
+      showSection(loginSection);
+    });
+</script>
 </body>
 </html>
