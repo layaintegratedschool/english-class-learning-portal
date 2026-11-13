@@ -199,20 +199,38 @@
     if (!navigator.onLine || !currentUser || !currentStudentProfile) return;
     const pending = getPendingSubmissions().filter(item => item.student_id === currentUser.id);
     for (const item of pending) {
+      // Older locally saved submissions may not yet contain term/week/answer fields.
+      const quizParts = String(item.quiz_id || "").match(/term-(\d+)-week-(\d+)/i);
+      const termNumber = Number(item.term_number || (quizParts && quizParts[1]));
+      const weekNumber = Number(item.week_number || (quizParts && quizParts[2]));
+      const totalQuestions = Number(item.total_questions ?? item.total_items);
+      if (!termNumber || !weekNumber || !totalQuestions) {
+        const note = document.getElementById("quizSyncNote");
+        if (note) note.textContent = "This saved result is missing its term, week, or question count. Please contact the administrator.";
+        console.error("Quiz result is missing required fields:", item);
+        break;
+      }
       const { error } = await supabaseClient.from("quiz_results").insert([{
         id: item.id,
+        client_submission_id: item.client_submission_id || item.id,
         student_id: item.student_id,
-        quiz_id: item.quiz_id,
-        quiz_title: item.quiz_title,
-        grade_level: item.grade_level,
+        term_number: termNumber,
+        week_number: weekNumber,
         score: item.score,
-        total_items: item.total_items,
-        submitted_at: item.submitted_at
+        total_questions: totalQuestions,
+        answers: Array.isArray(item.answers) ? item.answers : [],
+        submitted_at: item.submitted_at,
+        quiz_title: item.quiz_title,
+        quiz_id: item.quiz_id,
+        grade_level: item.grade_level,
+        total_items: totalQuestions
       }]);
       if (!error || error.code === "23505") {
         removePendingSubmission(item.id);
       } else {
-        console.warn("Quiz result sync is pending:", error.message);
+        const note = document.getElementById("quizSyncNote");
+        if (note) note.textContent = "Sync failed: " + error.message;
+        console.error("Quiz result sync failed:", error);
         break;
       }
     }
@@ -281,7 +299,7 @@
     weeksView.classList.remove("hidden");
   }
 
-  function renderLesson(lesson) {
+  function renderLesson(lesson, termNumber, weekNumber) {
     const objectives = lesson.objectives.map(item => "<li>" + escapeHTML(item) + "</li>").join("");
     const discussions = lesson.lessons.map(item =>
       '<section class="lesson-section"><h3>' + escapeHTML(item.heading) +
@@ -295,7 +313,8 @@
       return '<div class="question-card"><p>' + (index + 1) + '. ' + escapeHTML(item.q) + '</p>' + choices + '</div>';
     }).join("");
 
-    const quizId = "grade-7-term-1-week-" + lesson.week;
+    const gradeSlug = String(currentGradeLevel || "Grade").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const quizId = gradeSlug + "-term-" + Number(termNumber) + "-week-" + Number(weekNumber);
     const quizQuestions = lesson.quiz.map((item, index) => {
       // Shuffle answer choices so the correct answer is not always displayed first.
       const shuffled = item.options.map((option, originalIndex) => ({
@@ -315,7 +334,7 @@
     }).join("");
 
     lessonContent.innerHTML =
-      '<div class="lesson-banner"><p><strong>WEEK ' + lesson.week + ' · GRADE 7 · TERM 1</strong></p>' +
+      '<div class="lesson-banner"><p><strong>WEEK ' + Number(weekNumber) + ' · ' + escapeHTML(currentGradeLevel) + ' · TERM ' + Number(termNumber) + '</strong></p>' +
       '<h2>' + escapeHTML(lesson.title) + '</h2><p>' + escapeHTML(lesson.overview) + '</p></div>' +
       '<section class="lesson-section"><h3>Learning Objectives</h3><ul class="objective-list">' + objectives + '</ul></section>' +
       '<h2>Lesson Discussion</h2>' + discussions +
@@ -364,12 +383,17 @@
       const submittedAt = new Date().toISOString();
       const submission = {
         id: crypto.randomUUID(),
+        client_submission_id: null,
         student_id: currentUser?.id || "",
+        term_number: Number(termNumber),
+        week_number: Number(weekNumber),
         quiz_id: quizId,
         quiz_title: lesson.title,
         grade_level: currentGradeLevel,
         score,
+        total_questions: lesson.quiz.length,
         total_items: lesson.quiz.length,
+        answers,
         submitted_at: submittedAt
       };
       if (!submission.student_id) {
@@ -396,7 +420,7 @@
     if (currentGradeLevel === "Grade 7" && Number(termNumber) === 1) {
       const lesson = GRADE7_TERM1.find(item => item.week === weekNumber);
       if (lesson) {
-        renderLesson(lesson);
+        renderLesson(lesson, termNumber, weekNumber);
       } else {
         lessonContent.innerHTML = "<p>Learning materials for this week are not available yet.</p>";
       }
